@@ -8,6 +8,8 @@ Window {
     title: qsTr("Hello World")
     color: "black"
 
+    FontLoader { id: fontv; source: "./fonts/Manrope.ttf"; }
+
 
     MouseArea {
         x: 100
@@ -52,7 +54,7 @@ Window {
             //kkk.start()
             //hhh.children["kkk"].start();
             qae.state = "ON"
-            modelv.setData(modelv.index(0, 0), "Russia", 257)
+            //modelv.setData(modelv.index(0, 0), "Russia", 257)
         }
 
         Rectangle {
@@ -149,15 +151,14 @@ Window {
         x: 250
         y: 250
         width: 600
-        height: 500
-        cellWidth: 254
+        height: 600
+        cellWidth: 304
         cellHeight: 54
         model: modelv
 
+
         flow: GridView.FlowTopToBottom
         layoutDirection: "LeftToRight"
-
-
 
         state: "ON"
         states: [
@@ -170,22 +171,63 @@ Window {
         ]
 
         delegate: Row {
+            id: scoreRow
             padding: 2
+
+            state: qae.state
+
+            states: [
+                State {
+                    name: "ON"
+                },
+                State {
+                    name: "OFF"
+                }
+            ]
+            transitions: [
+                Transition {
+                    from: "ON"
+                    to: "OFF"
+                    ParallelAnimation {
+
+                        PropertyAnimation {
+                            target: scoreRow
+                            property: "opacity"
+                            //from: 0.0
+                            to: 1.0
+                            duration: 200
+                        }
+                        }
+                    }
+                ,
+                Transition {
+                    from: "OFF"
+                    to: "ON"
+                    PropertyAnimation {
+                        target: scoreRow
+                        property: "opacity"
+                        //from: 1.0
+                        to: 0.0
+                        duration: 200
+                    }
+                }
+            ]
             required property string participant
+            required property string points
                 HeartImage {
                     width: 50
                     height: 50
                     clip: true
                     state: qae.state
-                    heartImage: "images/rus.png"
+                    heartImage: participant == "Россия" ? "images/rus.png" : "images/flag.png"
                 }
                 Rectangle{
-                    width: 150
+                    width: 200
                     height: 50
                     color: "transparent"
                     clip: true
                     HeartBackground{
-                        width: 150
+                        width: 200
                         height: 50
                         clip: true
                         heartColor: "indigo"
@@ -196,76 +238,56 @@ Window {
                         id: ccv
                         x: 0
                         y: 0
-                        width: 150
+                        width: 200
                         height: 50
                         clip: true
                         color: "transparent"
-                        state: qae.state
-
-                        states: [
-                            State {
-                                name: "ON"
-                            },
-                            State {
-                                name: "OFF"
-                            }
-                        ]
-                        transitions: [
-                            Transition {
-                                from: "ON"
-                                to: "OFF"
-                                ParallelAnimation {
-
-                                    PropertyAnimation {
-                                        target: ccv
-                                        property: "opacity"
-                                        //from: 0.0
-                                        to: 1.0
-                                        duration: 200
-                                    }
-                                    }
-                                }
-                            ,
-                            Transition {
-                                from: "OFF"
-                                to: "ON"
-                                PropertyAnimation {
-                                    target: ccv
-                                    property: "opacity"
-                                    //from: 1.0
-                                    to: 0.0
-                                    duration: 200
-                                }
-                            }
-                        ]
 
 
                         Text {
                             text: participant
-                            font.pixelSize: 18
+                            anchors.fill: parent
+                            anchors.leftMargin: 16
+                            horizontalAlignment: Text.AlignLeft
+                            verticalAlignment: Text.AlignVCenter
+
                             color: 'white'
-                            y: 15
-                            x: 10
-                            font.family: "Helvetica"
 
-
-                            //anchors.centerIn: parent
-                            //anchors.verticalCenter: parent
-
-                            //horizontalAlignment: Text.AlignLeft
+                            font.family: fontv.name
+                            font.pixelSize: 22;
+                            font.bold: true;
                         }
                     }
 
                 }
-
-                HeartBackground{
+                Rectangle{
                     width: 50
                     height: 50
+                    color: "transparent"
                     clip: true
-                    heartColor: "white"
-                    state: qae.state
-                    delay: 8
+                    HeartBackground{
+                        width: 50
+                        height: 50
+                        clip: true
+                        heartColor: "white"
+                        state: qae.state
+                        delay: 8
+                    }
+                    Text {
+                        text: points
+                        anchors.fill: parent
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+
+                        color: 'black'
+
+                        font.family: fontv.name
+                        font.pixelSize: 22;
+                        font.bold: true;
+                    }
                 }
+
+
             }
 
 

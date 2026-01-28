@@ -10,6 +10,7 @@ int main(int argc, char *argv[])
 
     ScoreModel model;
     model.addScore(Score("Россия", 0, 0, 0));
+    model.addScore(Score("Евровидение", 0, 0, 0));
 
     ScoreActor actor(nullptr, &model);
 
