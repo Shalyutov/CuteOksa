@@ -213,7 +213,19 @@ Window {
                 }
             ]
             required property string participant
-            required property string points
+            required property int points
+
+            property real anim: points
+            Behavior on anim {
+                SequentialAnimation{
+
+                    PauseAnimation {
+                        duration: 1000
+                    }
+                    NumberAnimation { duration: 200 }
+                }
+
+            }
                 HeartImage {
                     width: 50
                     height: 50
@@ -269,21 +281,22 @@ Window {
                         width: 50
                         height: 50
                         clip: true
-                        heartColor: "white"
+                        heartColor: points == 12 ? "cyan" : "white"
                         state: qae.state
                         delay: 8
                     }
                     Text {
-                        text: points
+                        text: points //Math.floor(anim).toFixed(0)
                         anchors.fill: parent
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
 
-                        color: 'black'
+                        color: points == 12 ? "purple" : "black"
 
                         font.family: fontv.name
                         font.pixelSize: 22;
                         font.bold: true;
+
                     }
                 }
 

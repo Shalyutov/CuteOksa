@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/res">
+        <file alias="score">res/score.json</file>
+    </qresource>
+</RCC>

@@ -145,13 +145,13 @@ Item {
                     duration: 1
                     easing.type: Easing.OutInQuad
                 }
-                PropertyAnimation {
+                /*PropertyAnimation {
                     target: bsw
                     property: "opacity"
                     //from: 0.0
                     to: 1.0
                     duration: 1
-                }
+                }*/
                 //PauseAnimation{duration: 100 * index}
                 ParallelAnimation {
                     id: kkk
@@ -209,13 +209,13 @@ Item {
         Transition {
             from: "OFF"
             to: "ON"
-            PropertyAnimation {
+            /*PropertyAnimation {
                 target: bsw
                 property: "opacity"
                 from: 1.0
                 to: 0.0
                 duration: 200
-            }
+            }*/
         }
     ]
     Rectangle {
