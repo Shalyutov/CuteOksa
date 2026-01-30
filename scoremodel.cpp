@@ -117,3 +117,31 @@ bool ScoreModel::setData(const QModelIndex &index, const QVariant &value, int ro
 
     return true;
 }
+
+bool ScoreModel::removeRows(int row, int count, const QModelIndex &parent) {
+
+    if (row < 0 || row + count > m_scores.length()) {
+        //return false;
+    }
+
+    beginRemoveRows(parent, row, row + count - 1);
+
+    while (count--) m_scores.removeAt(row);
+
+
+    endRemoveRows();
+
+    return true;
+}
+
+void ScoreModel::clearAllItems()
+{
+    // Notify views that the model is about to be reset
+    beginResetModel();
+
+    // Clear your underlying data structure (e.g., QList, QVector, etc.)
+    m_scores.clear();
+
+    // Notify views that the model has been reset
+    endResetModel();
+}

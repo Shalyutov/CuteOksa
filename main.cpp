@@ -8,16 +8,9 @@
 #include <QList>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QString>
 
-struct ScoreMark {
-    QString to;
-    int amount;
-};
 
-struct CountryScore {
-    QString from;
-    QList<ScoreMark> marks;
-};
 
 void loadResults () {
     QString val;
@@ -36,12 +29,10 @@ int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
 
-
     ScoreModel model;
-    //model.addScore(Score("Россия", 0, 0, 0));
-    //model.addScore(Score("Евровидение", 0, 0, 0));
+    ScoreModel juryModel;
 
-    //
+    // load countries points
 
     QString val;
     QFile file(":/res/score.json");
@@ -56,9 +47,48 @@ int main(int argc, char *argv[])
     for (const QJsonValue &country : countries){
         model.addScore(Score(country.toString(), 0, 0, 0));
     }
+
+    QJsonArray jury = root["jury"].toArray();
+    QList<CountryScore> juryScores = QList<CountryScore> ();
+    for (const QJsonValue &from : jury){
+
+        CountryScore item;
+        item.from = from["from"].toString();
+        item.marks = QList<ScoreMark>();
+
+        QJsonArray marks = from["marks"].toArray();
+        for (const QJsonValue &mark : marks){
+            ScoreMark rec;
+            rec.to = mark["to"].toString();
+            rec.amount = mark["amount"].toInt();
+            item.marks.append(rec);
+        }
+
+        juryScores.append(item);
+    }
+
+    QJsonArray publicVote = root["public"].toArray();
+    QList<CountryScore> publicScores = QList<CountryScore> ();
+    for (const QJsonValue &from : publicVote){
+
+        CountryScore item;
+        item.from = from["from"].toString();
+        item.marks = QList<ScoreMark>();
+
+        QJsonArray marks = from["marks"].toArray();
+        for (const QJsonValue &mark : marks){
+            ScoreMark rec;
+            rec.to = mark["to"].toString();
+            rec.amount = mark["amount"].toInt();
+            item.marks.append(rec);
+        }
+
+        publicScores.append(item);
+    }
+
     //
 
-    ScoreActor actor(nullptr, &model);
+    ScoreActor actor(nullptr, &model, &juryModel, juryScores, publicScores);
 
     QQmlApplicationEngine engine;
 
@@ -71,6 +101,7 @@ int main(int argc, char *argv[])
 
     QQmlContext* context = engine.rootContext();
     context->setContextProperty( "modelv", QVariant::fromValue(&model));
+    context->setContextProperty( "modelj", QVariant::fromValue(&juryModel));
     context->setContextProperty( "actorv", QVariant::fromValue(&actor));
     engine.loadFromModule("untitled1", "Main");
 

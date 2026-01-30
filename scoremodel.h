@@ -51,6 +51,9 @@ public:
 
     bool setData(const QModelIndex &index, const QVariant &value, int role);
 
+    bool removeRows(int row, int count, const QModelIndex &parent);
+    void clearAllItems();
+
 protected:
     QHash<int, QByteArray> roleNames() const;
 private:

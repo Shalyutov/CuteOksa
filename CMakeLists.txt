@@ -29,6 +29,8 @@ qt_add_qml_module(cuteoksa
         SOURCES scoreactor.h
         RESOURCES images/rus.png
         RESOURCES fonts/Manrope.ttf
+        QML_FILES JuryPanel.qml
+        QML_FILES Scoreboard.qml
 )
 
 qt_add_resources(cuteoksa "res"
