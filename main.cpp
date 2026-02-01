@@ -48,6 +48,10 @@ int main(int argc, char *argv[])
         model.addScore(Score(country.toString(), 0, 0, 0));
     }
 
+    for (int i = 0; i < 4; i++) {
+        juryModel.addScore(Score("", 0, 0, 0));
+    }
+
     QJsonArray jury = root["jury"].toArray();
     QList<CountryScore> juryScores = QList<CountryScore> ();
     for (const QJsonValue &from : std::as_const(jury)){

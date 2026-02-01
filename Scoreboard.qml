@@ -12,7 +12,7 @@ GridView {
     flow: GridView.FlowTopToBottom
     layoutDirection: "LeftToRight"
 
-    state: "ON"
+    required state
     states: [
         State {
             name: "OFF"
@@ -23,11 +23,25 @@ GridView {
     ]
 
     displaced: Transition {
-        NumberAnimation { properties: "x,y"; duration: 300; easing.type: Easing.OutCubic }
+        SequentialAnimation{
+
+            PauseAnimation {
+                duration: 3000
+            }
+            NumberAnimation { properties: "x,y"; duration: 300; easing.type: Easing.OutCubic }
+        }
+
     }
 
     move: Transition {
-        NumberAnimation { properties: "x,y"; duration: 300; easing.type: Easing.OutCubic }
+        SequentialAnimation{
+
+            PauseAnimation {
+                duration: 3000
+            }
+            NumberAnimation { properties: "x,y"; duration: 300; easing.type: Easing.OutCubic }
+        }
+
     }
 
     delegate: Row {

@@ -1,7 +1,7 @@
 import QtQuick
 
 GridView {
-    id: qae
+    id: qaef
 
     width: 600
     height: 800
@@ -12,21 +12,15 @@ GridView {
     flow: GridView.FlowTopToBottom
     layoutDirection: "LeftToRight"
 
-    state: "ON"
-    states: [
-        State {
-            name: "OFF"
-        },
-        State {
-            name: "ON"
-        }
-    ]
+    required property string juryState
+    state: juryState
+
 
     delegate: Row {
         id: scoreRow
         padding: 2
 
-        state: qae.state
+        state: juryState
 
         states: [
             State {
@@ -83,7 +77,7 @@ GridView {
                 width: 50
                 height: 50
                 clip: true
-                state: qae.state
+                state: juryState
                 heartImage: participant == "Россия" ? "images/rus.png" : "images/flag.png"
             }
             Rectangle{
@@ -96,7 +90,7 @@ GridView {
                     height: 50
                     clip: true
                     heartColor: "indigo"
-                    state: qae.state
+                    state: juryState
                     delay: 0
                 }
                 Rectangle {
@@ -135,7 +129,7 @@ GridView {
                     height: 50
                     clip: true
                     heartColor: "white" //points == 12 ? "cyan" : "white"
-                    state: qae.state
+                    state: juryState
                     delay: 8
                 }
                 Text {

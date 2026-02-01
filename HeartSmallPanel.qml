@@ -119,8 +119,8 @@ Item {
         Rectangle {
             id: ggg
             visible: false
-            width: 20
-            height: 20
+            width: 0
+            height: 0
             x: 0
             y: 0
             color: "transparent"

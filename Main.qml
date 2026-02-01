@@ -15,7 +15,7 @@ Window {
     FontLoader { id: fontv; source: "./fonts/Manrope.ttf"; }
 
 
-    MouseArea {
+    /*MouseArea {
         x: 100
         y: 100
         height: 50
@@ -26,7 +26,7 @@ Window {
 
             //kkk.start()
             //hhh.children["kkk"].start();
-            qae.state = "OFF"
+            //qae.state = "OFF"
             //modelv.setData(modelv.index(0, 0), "Россия", 257)
         }
 
@@ -57,7 +57,7 @@ Window {
 
             //kkk.start()
             //hhh.children["kkk"].start();
-            qae.state = "ON"
+            //qae.state = "ON"
             //modelv.setData(modelv.index(0, 0), "Russia", 257)
         }
 
@@ -91,7 +91,7 @@ Window {
             //qae.state = "ON"
             //actorv.start();
             //actorv.juryReveal();
-            modelv.moveScore(2, 0);
+            //modelv.moveScore(2, 0);
 
         }
 
@@ -148,37 +148,41 @@ Window {
                 }
             }
         }
-    }
+    }*/
 
     Text {
-       y:50
+       y:0
        text: "readyP = " + actorv.readyP + "\n" + "giveMarksP = " + actorv.giveMarksP + "\n" + "readyHighP = " + actorv.readyHighP + "\n" + "giveHighMarksP = " + actorv.giveHighMarkP + "\n"
         color: 'white'
     }
 
     JuryPanel{
-        id: qae
-        x: 0
-        y: 250
+        //id: qaef
+        x: 150
+        y: 150
         model: modelj
-        state: getJuryState()
         visible: getJuryVisible()
+        juryState: getJuryState()
 
         function getJuryState()
         {
-            if (!actorv.readyP && !actorv.giveMarksP && !actorv.readyP && !actorv.giveHighMarkP) {
+            if (!actorv.readyP && !actorv.giveMarksP && !actorv.readyHighP && !actorv.giveHighMarkP) {
                 //visible = true;
                 return "ON"
             }
-            else if (actorv.readyP && !actorv.giveMarksP && !actorv.readyP && !actorv.giveHighMarkP) {
+            else if (actorv.readyP && !actorv.giveMarksP && !actorv.readyHighP && !actorv.giveHighMarkP) {
                 //visible = true;
                 return "ON"
             }
-            else if (actorv.readyP && actorv.giveMarksP && !actorv.readyP && !actorv.giveHighMarkP) {
+            else if (actorv.readyP && actorv.giveMarksP && !actorv.readyHighP && !actorv.giveHighMarkP) {
                 //visible = true;
                 return "OFF"
             }
-            else if (actorv.readyP && actorv.giveMarksP && actorv.readyP && !actorv.giveHighMarkP) {
+            else if (actorv.readyP && actorv.giveMarksP && actorv.readyHighP && !actorv.giveHighMarkP) {
+                //visible = true;
+                return "ON"
+            }
+            else if (actorv.readyP && actorv.giveMarksP && actorv.readyHighP && actorv.giveHighMarkP) {
                 //visible = true;
                 return "ON"
             }
@@ -197,13 +201,17 @@ Window {
             }
             else if (actorv.readyP && !actorv.giveMarksP && !actorv.readyHighP && !actorv.giveHighMarkP) {
                 //visible = true;
-                return true
+                return false
             }
             else if (actorv.readyP && actorv.giveMarksP && !actorv.readyHighP && !actorv.giveHighMarkP) {
                 //visible = true;
                 return true
             }
             else if (actorv.readyP && actorv.giveMarksP && actorv.readyHighP && !actorv.giveHighMarkP) {
+                //visible = true;
+                return false
+            }
+            else if (actorv.readyP && actorv.giveMarksP && actorv.readyHighP && actorv.giveHighMarkP) {
                 //visible = true;
                 return false
             }
@@ -217,12 +225,13 @@ Window {
     }
 
     Scoreboard {
-        x: 350
-        y: 250
+        x: 150
+        y: 150
         model: modelv
 
         visible: getScoreboardVisible()
         state: getScoreboardState()
+
         //visible: (!actorv.giveMarksP && !actorv.giveHighMarkP) ? false : true
         //state: (actorv.giveMarksP && actorv.readyHighP && !actorv.giveHighMarkP) ? "OFF" : "ON"
         focus: true

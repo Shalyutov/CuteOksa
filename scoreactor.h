@@ -144,15 +144,20 @@ public:
         if (!giveMarks && !giveHighMark) {
             if (!ready) {
                 setreadyP(true);
-                m_jurymodel->clearAllItems();
+                //m_jurymodel->clearAllItems();
                 return;
             }
+            int p = 0;
             for (const ScoreMark &mark : std::as_const(m_jury[_current].marks)){
                 if (mark.amount == 12) {
                     high = mark;
                     continue;
                 }
-                m_jurymodel->addScore(Score(mark.to, 0, mark.amount, 0));
+                QModelIndex bbv = m_scoremodel->index(p);
+                m_jurymodel->setData(bbv, mark.to, ScoreModel::ParticipantRole);
+                m_jurymodel->setData(bbv, 0, ScoreModel::IssuerRole);
+                m_jurymodel->setData(bbv, mark.amount, ScoreModel::MarkRole);
+                p++;
 
                 for (int i = 0; i < m_scoremodel->rowCount(); i++) {
                     QModelIndex idx = m_scoremodel->index(i);
@@ -167,10 +172,12 @@ public:
             }
 
             setgiveMarksP(true);
+            //reorder();
         }
         else if (giveMarks && !giveHighMark) {
             if (!readyHigh) {
                 setreadyHighP(true);
+                reorder();
                 return;
             }
             for (int i = 0; i < m_scoremodel->rowCount(); i++) {
@@ -184,6 +191,7 @@ public:
                 }
             }
             setgiveHighMarkP(true);
+            reorder();
         }
         else if (giveMarks && giveHighMark) {
             setcurrentP(_current+1);
@@ -195,6 +203,24 @@ public:
                 QModelIndex idx = m_scoremodel->index(i);
                 m_scoremodel->setData(idx, 0, ScoreModel::MarkRole);
                 m_scoremodel->setData(idx, 0, ScoreModel::IssuerRole);
+            }
+        }
+    }
+
+    void reorder() {
+        for (int curr = 0; curr < m_scoremodel->rowCount(); curr++) {
+            int max = -1;
+            int maxIdx = -1;
+            for (int i = curr; i < m_scoremodel->rowCount(); i++) {
+                QModelIndex idx = m_scoremodel->index(i);
+                int points = m_scoremodel->data(idx, ScoreModel::PointsRole).toInt();
+                if (points >= max) {
+                    max = points;
+                    maxIdx = i;
+                }
+            }
+            if (max != -1){
+                m_scoremodel->moveScore(maxIdx, curr);
             }
         }
     }

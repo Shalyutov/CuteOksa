@@ -228,8 +228,8 @@ Item {
         Rectangle {
             id: ggg
             visible: false
-            width: 50
-            height: 50
+            width: 0
+            height: 0
             x: 0
             y: 0
             color: "transparent"
