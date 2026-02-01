@@ -22,6 +22,14 @@ GridView {
         }
     ]
 
+    displaced: Transition {
+        NumberAnimation { properties: "x,y"; duration: 300; easing.type: Easing.OutCubic }
+    }
+
+    move: Transition {
+        NumberAnimation { properties: "x,y"; duration: 300; easing.type: Easing.OutCubic }
+    }
+
     delegate: Row {
         id: scoreRow
         padding: 2

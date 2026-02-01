@@ -53,6 +53,7 @@ public:
 
     bool removeRows(int row, int count, const QModelIndex &parent);
     void clearAllItems();
+    Q_INVOKABLE void moveScore(int from, int to);
 
 protected:
     QHash<int, QByteArray> roleNames() const;

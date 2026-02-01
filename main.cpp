@@ -44,20 +44,20 @@ int main(int argc, char *argv[])
     QJsonObject root = d.object();
 
     QJsonArray countries = root["countries"].toArray();
-    for (const QJsonValue &country : countries){
+    for (const QJsonValue &country : std::as_const(countries)){
         model.addScore(Score(country.toString(), 0, 0, 0));
     }
 
     QJsonArray jury = root["jury"].toArray();
     QList<CountryScore> juryScores = QList<CountryScore> ();
-    for (const QJsonValue &from : jury){
+    for (const QJsonValue &from : std::as_const(jury)){
 
         CountryScore item;
         item.from = from["from"].toString();
         item.marks = QList<ScoreMark>();
 
         QJsonArray marks = from["marks"].toArray();
-        for (const QJsonValue &mark : marks){
+        for (const QJsonValue &mark : std::as_const(marks)){
             ScoreMark rec;
             rec.to = mark["to"].toString();
             rec.amount = mark["amount"].toInt();
@@ -69,14 +69,14 @@ int main(int argc, char *argv[])
 
     QJsonArray publicVote = root["public"].toArray();
     QList<CountryScore> publicScores = QList<CountryScore> ();
-    for (const QJsonValue &from : publicVote){
+    for (const QJsonValue &from : std::as_const(publicVote)){
 
         CountryScore item;
         item.from = from["from"].toString();
         item.marks = QList<ScoreMark>();
 
         QJsonArray marks = from["marks"].toArray();
-        for (const QJsonValue &mark : marks){
+        for (const QJsonValue &mark : std::as_const(marks)){
             ScoreMark rec;
             rec.to = mark["to"].toString();
             rec.amount = mark["amount"].toInt();
@@ -85,6 +85,8 @@ int main(int argc, char *argv[])
 
         publicScores.append(item);
     }
+
+
 
     //
 

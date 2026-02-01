@@ -25,12 +25,16 @@ class ScoreActor : public QObject
     Q_PROPERTY(int giveHighMarkP READ giveHighMarkP WRITE setgiveHighMarkP NOTIFY giveHighMarkPChanged)
     Q_PROPERTY(int juryP READ juryP WRITE setjuryP NOTIFY juryPChanged)
     Q_PROPERTY(int currentP READ currentP WRITE setcurrentP NOTIFY currentPChanged)
+    Q_PROPERTY(int readyP READ readyP WRITE setreadyP NOTIFY readyPChanged)
+    Q_PROPERTY(int readyHighP READ readyHighP WRITE setreadyHighP NOTIFY readyHighPChanged)
 
 signals:
     void giveMarksPChanged();
     void giveHighMarkPChanged();
     void juryPChanged();
     void currentPChanged();
+    void readyPChanged();
+    void readyHighPChanged();
 
 public:
     explicit ScoreActor (QObject* parent = 0,
@@ -57,6 +61,14 @@ public:
 
     bool juryP(){
         return _jury;
+    }
+
+    bool readyP(){
+        return ready;
+    }
+
+    bool readyHighP(){
+        return readyHigh;
     }
 
     int currentP(){
@@ -87,6 +99,22 @@ public:
         }
     }
 
+    void setreadyP(const bool &arg){
+        if(ready != arg)
+        {
+            ready = arg;
+            emit readyPChanged();
+        }
+    }
+
+    void setreadyHighP(const bool &arg){
+        if(readyHigh != arg)
+        {
+            readyHigh = arg;
+            emit readyPChanged();
+        }
+    }
+
     void setcurrentP(const int &arg){
         if(_current != arg)
         {
@@ -94,6 +122,8 @@ public:
             emit currentPChanged();
         }
     }
+
+
 
     /////////////
 
@@ -107,14 +137,17 @@ public:
     Q_INVOKABLE void juryReveal(){
         if (_current > m_jury.length()-1) {
             setjuryP(false);
+            setreadyP(false);
             return;
         }
 
         if (!giveMarks && !giveHighMark) {
-            //m_jurymodel->removeRows(0, m_jurymodel->rowCount(), m_jurymodel->index(0));
-            m_jurymodel->clearAllItems();
-
-            for (const ScoreMark &mark : m_jury[_current].marks){
+            if (!ready) {
+                setreadyP(true);
+                m_jurymodel->clearAllItems();
+                return;
+            }
+            for (const ScoreMark &mark : std::as_const(m_jury[_current].marks)){
                 if (mark.amount == 12) {
                     high = mark;
                     continue;
@@ -136,6 +169,10 @@ public:
             setgiveMarksP(true);
         }
         else if (giveMarks && !giveHighMark) {
+            if (!readyHigh) {
+                setreadyHighP(true);
+                return;
+            }
             for (int i = 0; i < m_scoremodel->rowCount(); i++) {
                 QModelIndex idx = m_scoremodel->index(i);
                 if (m_scoremodel->data(idx, ScoreModel::ParticipantRole).toString() == high.to) {
@@ -146,12 +183,14 @@ public:
                     m_scoremodel->setData(idx, sum, ScoreModel::PointsRole);
                 }
             }
-            giveHighMark = true;
+            setgiveHighMarkP(true);
         }
         else if (giveMarks && giveHighMark) {
             setcurrentP(_current+1);
             setgiveMarksP(false);
             setgiveHighMarkP(false);
+            setreadyP(false);
+            setreadyHighP(false);
             for (int i = 0; i < m_scoremodel->rowCount(); i++) {
                 QModelIndex idx = m_scoremodel->index(i);
                 m_scoremodel->setData(idx, 0, ScoreModel::MarkRole);
@@ -174,6 +213,8 @@ protected:
     QList<CountryScore> m_public;
     int _current = 0;
     bool _jury = true;
+    bool ready = false;
+    bool readyHigh = false;
     bool giveMarks = false;
     bool giveHighMark = false;
     ScoreMark high;

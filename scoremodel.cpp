@@ -117,7 +117,7 @@ bool ScoreModel::setData(const QModelIndex &index, const QVariant &value, int ro
 
     return true;
 }
-
+//do not work
 bool ScoreModel::removeRows(int row, int count, const QModelIndex &parent) {
 
     if (row < 0 || row + count > m_scores.length()) {
@@ -144,4 +144,14 @@ void ScoreModel::clearAllItems()
 
     // Notify views that the model has been reset
     endResetModel();
+}
+
+void ScoreModel::moveScore(int from, int to)
+{
+    if(from>=0 && from<m_scores.count() && to >= 0 && to<m_scores.count() && from != to)
+    {
+        beginMoveRows(QModelIndex(),from,from,QModelIndex(),to);
+        m_scores.move(from, to);
+        endMoveRows();
+    }
 }

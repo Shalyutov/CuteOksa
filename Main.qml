@@ -11,6 +11,7 @@ Window {
     y: 200
 
 
+
     FontLoader { id: fontv; source: "./fonts/Manrope.ttf"; }
 
 
@@ -87,9 +88,11 @@ Window {
 
             //kkk.start()
             //hhh.children["kkk"].start();
-            qae.state = "ON"
+            //qae.state = "ON"
             //actorv.start();
-            actorv.juryReveal();
+            //actorv.juryReveal();
+            modelv.moveScore(2, 0);
+
         }
 
         Rectangle {
@@ -147,21 +150,144 @@ Window {
         }
     }
 
+    Text {
+       y:50
+       text: "readyP = " + actorv.readyP + "\n" + "giveMarksP = " + actorv.giveMarksP + "\n" + "readyHighP = " + actorv.readyHighP + "\n" + "giveHighMarksP = " + actorv.giveHighMarkP + "\n"
+        color: 'white'
+    }
+
     JuryPanel{
         id: qae
         x: 0
         y: 250
         model: modelj
-        //visible: (actorv.giveMarksP && !actorv.giveHighMarkP) ? false : true
-        state: (!actorv.giveMarksP && !actorv.giveHighMarkP) ? "ON" : "OFF"
+        state: getJuryState()
+        visible: getJuryVisible()
+
+        function getJuryState()
+        {
+            if (!actorv.readyP && !actorv.giveMarksP && !actorv.readyP && !actorv.giveHighMarkP) {
+                //visible = true;
+                return "ON"
+            }
+            else if (actorv.readyP && !actorv.giveMarksP && !actorv.readyP && !actorv.giveHighMarkP) {
+                //visible = true;
+                return "ON"
+            }
+            else if (actorv.readyP && actorv.giveMarksP && !actorv.readyP && !actorv.giveHighMarkP) {
+                //visible = true;
+                return "OFF"
+            }
+            else if (actorv.readyP && actorv.giveMarksP && actorv.readyP && !actorv.giveHighMarkP) {
+                //visible = true;
+                return "ON"
+            }
+            else {
+                //visible = false;
+                return "ON"
+            }
+
+        }
+
+        function getJuryVisible()
+        {
+            if (!actorv.readyP && !actorv.giveMarksP && !actorv.readyHighP && !actorv.giveHighMarkP) {
+                //visible = true;
+                return false
+            }
+            else if (actorv.readyP && !actorv.giveMarksP && !actorv.readyHighP && !actorv.giveHighMarkP) {
+                //visible = true;
+                return true
+            }
+            else if (actorv.readyP && actorv.giveMarksP && !actorv.readyHighP && !actorv.giveHighMarkP) {
+                //visible = true;
+                return true
+            }
+            else if (actorv.readyP && actorv.giveMarksP && actorv.readyHighP && !actorv.giveHighMarkP) {
+                //visible = true;
+                return false
+            }
+            else {
+                //visible = false;
+                return false
+            }
+        }
+
+        //state: (!actorv.giveMarksP && !actorv.giveHighMarkP) ? "OFF" : "ON"
     }
 
     Scoreboard {
         x: 350
         y: 250
         model: modelv
+
+        visible: getScoreboardVisible()
+        state: getScoreboardState()
         //visible: (!actorv.giveMarksP && !actorv.giveHighMarkP) ? false : true
-        state: (actorv.giveMarksP && !actorv.giveHighMarkP) ? "OFF" : "ON"
+        //state: (actorv.giveMarksP && actorv.readyHighP && !actorv.giveHighMarkP) ? "OFF" : "ON"
+        focus: true
+        Keys.onPressed: (event) => {
+            if (event.key === Qt.Key_Space) {
+                                //qae.state = "ON";
+                                actorv.juryReveal();
+                                event.accepted = true;
+            }
+        }
+
+        function getScoreboardVisible(){
+
+            if (!actorv.readyP && !actorv.giveMarksP && !actorv.readyHighP && !actorv.giveHighMarkP) {
+                //visible = true;
+                return false
+            }
+            else if (actorv.readyP && !actorv.giveMarksP && !actorv.readyHighP && !actorv.giveHighMarkP) {
+                //visible = true;
+                return false
+            }
+            else if (actorv.readyP && actorv.giveMarksP && !actorv.readyHighP && !actorv.giveHighMarkP) {
+                //visible = true;
+                return false
+            }
+            else if (actorv.readyP && actorv.giveMarksP && actorv.readyHighP && !actorv.giveHighMarkP) {
+                //visible = true;
+                return true
+            }
+            else if (actorv.readyP && actorv.giveMarksP && actorv.readyHighP && actorv.giveHighMarkP) {
+                //visible = true;
+                return true
+            }
+            else {
+                //visible = false;
+                return false
+            }
+        }
+
+        function getScoreboardState(){
+            if (!actorv.readyP && !actorv.giveMarksP && !actorv.readyHighP && !actorv.giveHighMarkP) {
+                //visible = true;
+                return "ON"
+            }
+            else if (actorv.readyP && !actorv.giveMarksP && !actorv.readyHighP && !actorv.giveHighMarkP) {
+                //visible = true;
+                return "ON"
+            }
+            else if (actorv.readyP && actorv.giveMarksP && !actorv.readyHighP && !actorv.giveHighMarkP) {
+                //visible = true;
+                return "ON"
+            }
+            else if (actorv.readyP && actorv.giveMarksP && actorv.readyHighP && !actorv.giveHighMarkP) {
+                //visible = true;
+                return "OFF"
+            }
+            else if (actorv.readyP && actorv.giveMarksP && actorv.readyHighP && actorv.giveHighMarkP) {
+                //visible = true;
+                return "OFF"
+            }
+            else {
+                //visible = false;
+                return "ON"
+            }
+        }
     }
 
 
