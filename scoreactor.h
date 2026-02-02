@@ -219,7 +219,7 @@ public:
                     maxIdx = i;
                 }
             }
-            if (max != -1){
+            if (max != -1 && max != 0){
                 m_scoremodel->moveScore(maxIdx, curr);
             }
         }

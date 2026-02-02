@@ -3,9 +3,9 @@ import QtQuick
 GridView {
     id: qae
 
-    width: 600
-    height: 800
-    cellWidth: 400
+    width: 404*2
+    height: 54*13
+    cellWidth: 404
     cellHeight: 54
     required model
 
@@ -22,13 +22,13 @@ GridView {
         }
     ]
 
-    displaced: Transition {
+    moveDisplaced: Transition {
         SequentialAnimation{
 
             PauseAnimation {
-                duration: 3000
+                duration: 4000
             }
-            NumberAnimation { properties: "x,y"; duration: 300; easing.type: Easing.OutCubic }
+            NumberAnimation { properties: "x,y"; duration: 400; easing.type: Easing.OutCubic}
         }
 
     }
@@ -37,12 +37,24 @@ GridView {
         SequentialAnimation{
 
             PauseAnimation {
-                duration: 3000
+                duration: 4000
             }
-            NumberAnimation { properties: "x,y"; duration: 300; easing.type: Easing.OutCubic }
+            NumberAnimation { properties: "x,y"; duration: 400; easing.type: Easing.OutCubic}
         }
 
     }
+    displaced: Transition {
+            SequentialAnimation{
+
+                PauseAnimation {
+                    duration: 4000
+                }
+                NumberAnimation { properties: "x,y"; duration: 400; easing.type: Easing.OutCubic}
+            }
+
+        }
+
+
 
     delegate: Row {
         id: scoreRow
@@ -69,7 +81,7 @@ GridView {
                         property: "opacity"
                         //from: 0.0
                         to: 1.0
-                        duration: 200
+                        duration: 100
                     }
                     }
                 }
@@ -82,7 +94,7 @@ GridView {
                     property: "opacity"
                     //from: 1.0
                     to: 0.0
-                    duration: 200
+                    duration: 100
                 }
             }
         ]
@@ -90,6 +102,7 @@ GridView {
         required property int points
         required property int mark
         required property int issuer
+        required property int index
 
         property real anim: points
         Behavior on anim {
@@ -108,25 +121,26 @@ GridView {
                 clip: true
                 state: qae.state
                 heartImage: participant == "Россия" ? "images/rus.png" : "images/flag.png"
+                indexP: (2 * (index/13))
             }
             Rectangle{
                 width: 200
                 height: 50
                 color: "transparent"
-                clip: true
+                //clip: true
                 HeartBackground{
-                    width: 200
+                    width: 250
                     height: 50
                     clip: true
                     heartColor: "indigo"
                     state: qae.state
-                    delay: 0
+                    delay: 0 + (1 * ((index/13)))
                 }
                 Rectangle {
                     id: ccv
                     x: 0
                     y: 0
-                    width: 200
+                    width: 250
                     height: 50
                     clip: true
                     color: "transparent"
@@ -138,6 +152,7 @@ GridView {
                         anchors.leftMargin: 16
                         horizontalAlignment: Text.AlignLeft
                         verticalAlignment: Text.AlignVCenter
+                        opacity: (qae.state === "OFF" ? 1.0 : 0.0)
 
                         color: 'white'
 
@@ -148,25 +163,54 @@ GridView {
                 }
 
             }
+
             Rectangle{
                 width: 50
                 height: 50
                 color: "transparent"
                 clip: true
                 opacity: mark > 0 && issuer == 0 ? 1.0 : 0.0
-                HeartBackground{
+
+                Rectangle{
+                    width: 50
+                    height: 50
+                    color: "transparent"
+
+                    HeartPanel {
+                        width: 50
+                        height: 50
+                        clip: true
+                        heartColor: "violet"
+                        state: mark > 0 && mark < 12 ? qae.state : "ON"
+                        indexP: 8 + 4 + (1 * ((index/13)))
+                        opacity: mark > 0 && mark < 12 ? 1.0 : 0.0
+                    }
+                    HeartPanel {
+                        width: 50
+                        height: 50
+                        clip: true
+                        heartColor: "cyan"
+                        state: mark > 0 && mark == 12 ? qae.state : "ON"
+                        indexP: 0
+                        opacity: mark > 0 && mark == 12 ? 1.0 : 0.0
+                    }
+                }
+
+
+                /*HeartBackground{
                     width: 50
                     height: 50
                     clip: true
                     heartColor: mark == 12 ? "cyan" : "purple"
                     state: qae.state
-                    delay: 8
-                }
+                    delay: 8 + (2 * (model.rowCount() - index))
+                }*/
                 Text {
                     text:  mark //points //Math.floor(anim).toFixed(0)
                     anchors.fill: parent
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
+                    opacity: (qae.state === "OFF" ? 1.0 : 0.0)
 
                     color: mark == 12 ? "purple" : "white"
 
@@ -181,25 +225,28 @@ GridView {
                 height: 50
                 color: "transparent"
                 clip: true
-                HeartBackground{
+                HeartSquareBackground{
                     width: 50
                     height: 50
                     clip: true
                     heartColor: "white" //points == 12 ? "cyan" : "white"
                     state: qae.state
-                    delay: 8
+                    delay: 10 + (1 * ((index/13) ))
                 }
                 Text {
                     text: Math.floor(anim).toFixed(0) //points
                     anchors.fill: parent
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
+                    opacity: (qae.state === "OFF" ? 1.0 : 0.0)
 
                     color: "black" //points == 12 ? "purple" : "black"
 
                     font.family: fontv.name
-                    font.pixelSize: 20;
-                    font.bold: true;
+                    font.pixelSize: 20
+                    font.bold: true
+
+
 
                 }
             }

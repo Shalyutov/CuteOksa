@@ -31,6 +31,7 @@ qt_add_qml_module(cuteoksa
         RESOURCES fonts/Manrope.ttf
         QML_FILES JuryPanel.qml
         QML_FILES Scoreboard.qml
+        QML_FILES HeartSquareBackground.qml
 )
 
 qt_add_resources(cuteoksa "res"

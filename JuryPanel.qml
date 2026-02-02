@@ -41,7 +41,7 @@ GridView {
                         property: "opacity"
                         //from: 0.0
                         to: 1.0
-                        duration: 200
+                        duration: 100
                     }
                     }
                 }
@@ -54,10 +54,11 @@ GridView {
                     property: "opacity"
                     //from: 1.0
                     to: 0.0
-                    duration: 200
+                    duration: 100
                 }
             }
         ]
+        required property int index
         required property string participant
         required property int points
         required property int mark
@@ -79,6 +80,7 @@ GridView {
                 clip: true
                 state: juryState
                 heartImage: participant == "Россия" ? "images/rus.png" : "images/flag.png"
+                indexP: (2 * (model.rowCount() - index))
             }
             Rectangle{
                 width: 200
@@ -91,7 +93,7 @@ GridView {
                     clip: true
                     heartColor: "indigo"
                     state: juryState
-                    delay: 0
+                    delay: 0 + (2 * (model.rowCount() - index))
                 }
                 Rectangle {
                     id: ccv
@@ -109,6 +111,7 @@ GridView {
                         anchors.leftMargin: 16
                         horizontalAlignment: Text.AlignLeft
                         verticalAlignment: Text.AlignVCenter
+                        opacity: (qaef.state === "OFF" ? 1.0 : 0.0)
 
                         color: 'white'
 
@@ -124,19 +127,20 @@ GridView {
                 height: 50
                 color: "transparent"
                 clip: true
-                HeartBackground{
+                HeartSquareBackground{
                     width: 50
                     height: 50
                     clip: true
                     heartColor: "white" //points == 12 ? "cyan" : "white"
                     state: juryState
-                    delay: 8
+                    delay: 8 + (2 * (model.rowCount() - index))
                 }
                 Text {
                     text: mark //points //Math.floor(anim).toFixed(0)
                     anchors.fill: parent
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
+                    opacity: (qaef.state === "OFF" ? 1.0 : 0.0)
 
                     color: "black" //points == 12 ? "purple" : "black"
 

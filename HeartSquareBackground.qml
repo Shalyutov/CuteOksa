@@ -22,7 +22,7 @@ Item {
             Row {
                     spacing: -2
                     Repeater{
-                        model: 15
+                        model: 3
                         Item {
                             height: 20
                             width: 20
@@ -42,7 +42,7 @@ Item {
             Row {
                     spacing: -2
                     Repeater{
-                        model: 15
+                        model: 3
 
                         delegate: Item {
                             height: 20
@@ -63,7 +63,7 @@ Item {
             Row {
                     spacing: -2
                     Repeater{
-                        model: 15
+                        model: 3
                         delegate: Item {
                             height: 20
                             width: 20

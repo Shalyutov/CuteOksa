@@ -13,7 +13,7 @@ Item {
             name: "OFF"
         }
     ]
-    required property int index
+    required property int indexP
     required property color heartColor
     transitions: [
         Transition {
@@ -41,7 +41,7 @@ Item {
                     to: 1.0
                     duration: 1
                 }*/
-                PauseAnimation{duration: 100 * index}
+                PauseAnimation{duration: 100 * indexP}
                 ParallelAnimation {
                     id: kkk
                     PropertyAnimation {

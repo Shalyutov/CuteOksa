@@ -2,13 +2,13 @@ import QtQuick
 import QtQuick.Effects
 
 Window {
-    width: 900
-    height: 600
+    width: 1200
+    height: 800
     visible: true
     title: qsTr("Scoreboard")
     color: "black"
-    x: 200
-    y: 200
+    x: 100
+    y: 100
 
 
 
@@ -156,12 +156,14 @@ Window {
         color: 'white'
     }
 
+
+
     JuryPanel{
         //id: qaef
-        x: 150
-        y: 150
+        x: 350
+        y: 50
         model: modelj
-        visible: getJuryVisible()
+        //visible: getJuryVisible()
         juryState: getJuryState()
 
         function getJuryState()
@@ -226,10 +228,10 @@ Window {
 
     Scoreboard {
         x: 150
-        y: 150
+        y: 50
         model: modelv
 
-        visible: getScoreboardVisible()
+        //visible: getScoreboardVisible()
         state: getScoreboardState()
 
         //visible: (!actorv.giveMarksP && !actorv.giveHighMarkP) ? false : true
