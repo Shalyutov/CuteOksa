@@ -3,9 +3,9 @@ import QtQuick
 GridView {
     id: qae
 
-    width: 404*2
+    width: 354*2
     height: 54*13
-    cellWidth: 404
+    cellWidth: 354
     cellHeight: 54
     required model
 
@@ -28,7 +28,7 @@ GridView {
             PauseAnimation {
                 duration: 4000
             }
-            NumberAnimation { properties: "x,y"; duration: 400; easing.type: Easing.OutCubic}
+            NumberAnimation { properties: "x,y"; duration: 500; easing.type: Easing.OutCubic}
         }
 
     }
@@ -39,7 +39,7 @@ GridView {
             PauseAnimation {
                 duration: 4000
             }
-            NumberAnimation { properties: "x,y"; duration: 400; easing.type: Easing.OutCubic}
+            NumberAnimation { properties: "x,y"; duration: 500; easing.type: Easing.OutCubic}
         }
 
     }
@@ -49,7 +49,7 @@ GridView {
                 PauseAnimation {
                     duration: 4000
                 }
-                NumberAnimation { properties: "x,y"; duration: 400; easing.type: Easing.OutCubic}
+                NumberAnimation { properties: "x,y"; duration: 500; easing.type: Easing.OutCubic}
             }
 
         }
@@ -169,12 +169,13 @@ GridView {
                 height: 50
                 color: "transparent"
                 clip: true
-                opacity: mark > 0 && issuer == 0 ? 1.0 : 0.0
+
 
                 Rectangle{
                     width: 50
                     height: 50
                     color: "transparent"
+                    opacity: mark > 0 && issuer == 0 ? 1.0 : 0.0
 
                     HeartPanel {
                         width: 50
@@ -194,6 +195,89 @@ GridView {
                         indexP: 0
                         opacity: mark > 0 && mark == 12 ? 1.0 : 0.0
                     }
+                    Text {
+                        text:  mark //points //Math.floor(anim).toFixed(0)
+                        anchors.fill: parent
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        opacity: (qae.state === "OFF" ? 1.0 : 0.0)
+
+                        color: mark == 12 ? "purple" : "white"
+
+                        font.family: fontv.name
+                        font.pixelSize: 20;
+                        font.bold: true;
+
+                    }
+                }
+                Rectangle{
+                    id: rjj
+                    width: 50
+                    height: 50
+                    color: "transparent"
+                    visible: mark >= 0 && issuer == 1 ? true : false
+
+                    state: mark >= 0 && issuer == 1 ? "OFF" : "ON"
+                    states: [
+                        State {
+                            name: "ON"
+                        },
+                        State {
+                            name: "OFF"
+                        }
+                    ]
+                    transitions: [
+                        Transition {
+                            from: "ON"
+                            to: "OFF"
+                            SequentialAnimation {
+                                PauseAnimation{duration: 5000}
+                                PropertyAnimation {
+                                    target: rjj
+                                    property: "opacity"
+                                    //from: 0.0
+                                    to: 0.0
+                                    duration: 200
+                                }
+                                }
+                            }
+                        ,
+                        Transition {
+                            from: "OFF"
+                            to: "ON"
+                            PropertyAnimation {
+                                target: rjj
+                                property: "opacity"
+                                //from: 1.0
+                                to: 0.0
+                                duration: 100
+                            }
+                        }
+                    ]
+
+                    HeartPanel {
+                        width: 50
+                        height: 50
+                        clip: true
+                        heartColor: "magenta"
+                        state: mark >= 0 && issuer == 1 ? qae.state : "ON"
+                        indexP: 0
+                        opacity: mark >= 0 && issuer == 1 ? 1.0 : 0.0
+                    }
+                    Text {
+                        text:  mark //points //Math.floor(anim).toFixed(0)
+                        anchors.fill: parent
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        opacity: (qae.state === "OFF" ? 1.0 : 0.0)
+
+                        color: "white"
+
+                        font.family: fontv.name
+                        font.pixelSize: 20;
+                        font.bold: true;
+
+                    }
                 }
 
 
@@ -205,20 +289,7 @@ GridView {
                     state: qae.state
                     delay: 8 + (2 * (model.rowCount() - index))
                 }*/
-                Text {
-                    text:  mark //points //Math.floor(anim).toFixed(0)
-                    anchors.fill: parent
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    opacity: (qae.state === "OFF" ? 1.0 : 0.0)
 
-                    color: mark == 12 ? "purple" : "white"
-
-                    font.family: fontv.name
-                    font.pixelSize: 20;
-                    font.bold: true;
-
-                }
             }
             Rectangle{
                 width: 50

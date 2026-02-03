@@ -150,18 +150,18 @@ Window {
         }
     }*/
 
-    Text {
+    /*Text {
        y:0
        text: "readyP = " + actorv.readyP + "\n" + "giveMarksP = " + actorv.giveMarksP + "\n" + "readyHighP = " + actorv.readyHighP + "\n" + "giveHighMarksP = " + actorv.giveHighMarkP + "\n"
         color: 'white'
-    }
+    }*/
 
 
 
     JuryPanel{
         //id: qaef
         x: 350
-        y: 50
+        y: 150
         model: modelj
         //visible: getJuryVisible()
         juryState: getJuryState()
@@ -241,6 +241,7 @@ Window {
             if (event.key === Qt.Key_Space) {
                                 //qae.state = "ON";
                                 actorv.juryReveal();
+                                actorv.publicReveal();
                                 event.accepted = true;
             }
         }
@@ -274,24 +275,28 @@ Window {
         }
 
         function getScoreboardState(){
-            if (!actorv.readyP && !actorv.giveMarksP && !actorv.readyHighP && !actorv.giveHighMarkP) {
+            if (actorv.juryP && !actorv.readyP && !actorv.giveMarksP && !actorv.readyHighP && !actorv.giveHighMarkP) {
                 //visible = true;
                 return "ON"
             }
-            else if (actorv.readyP && !actorv.giveMarksP && !actorv.readyHighP && !actorv.giveHighMarkP) {
+            else if (actorv.juryP && actorv.readyP && !actorv.giveMarksP && !actorv.readyHighP && !actorv.giveHighMarkP) {
                 //visible = true;
                 return "ON"
             }
-            else if (actorv.readyP && actorv.giveMarksP && !actorv.readyHighP && !actorv.giveHighMarkP) {
+            else if (actorv.juryP && actorv.readyP && actorv.giveMarksP && !actorv.readyHighP && !actorv.giveHighMarkP) {
                 //visible = true;
                 return "ON"
             }
-            else if (actorv.readyP && actorv.giveMarksP && actorv.readyHighP && !actorv.giveHighMarkP) {
+            else if (actorv.juryP && actorv.readyP && actorv.giveMarksP && actorv.readyHighP && !actorv.giveHighMarkP) {
                 //visible = true;
                 return "OFF"
             }
-            else if (actorv.readyP && actorv.giveMarksP && actorv.readyHighP && actorv.giveHighMarkP) {
+            else if (actorv.juryP && actorv.readyP && actorv.giveMarksP && actorv.readyHighP && actorv.giveHighMarkP) {
                 //visible = true;
+                return "OFF"
+            }
+            else if (!actorv.juryP) {
+                //visible = false;
                 return "OFF"
             }
             else {

@@ -135,16 +135,24 @@ public:
     }
 
     Q_INVOKABLE void juryReveal(){
+        if (!_jury) {
+            return;
+        }
         if (_current > m_jury.length()-1) {
             setjuryP(false);
             setreadyP(false);
+            setcurrentP(m_scoremodel->rowCount() - 1);
+            for (int i = 0; i < m_scoremodel->rowCount(); i++) {
+                QModelIndex idx = m_scoremodel->index(i);
+                m_scoremodel->setData(idx, -1, ScoreModel::MarkRole);
+                m_scoremodel->setData(idx, 1, ScoreModel::IssuerRole);
+            }
             return;
         }
 
         if (!giveMarks && !giveHighMark) {
             if (!ready) {
                 setreadyP(true);
-                //m_jurymodel->clearAllItems();
                 return;
             }
             int p = 0;
@@ -172,7 +180,6 @@ public:
             }
 
             setgiveMarksP(true);
-            //reorder();
         }
         else if (giveMarks && !giveHighMark) {
             if (!readyHigh) {
@@ -205,6 +212,53 @@ public:
                 m_scoremodel->setData(idx, 0, ScoreModel::IssuerRole);
             }
         }
+    }
+
+    Q_INVOKABLE void publicReveal(){
+        if (_jury) {
+            return;
+        }
+        if (_current < 0){
+            return;
+        }
+        if (!ready) {
+            setreadyP(true);
+            /*for (int i = 0; i < m_scoremodel->rowCount(); i++) {
+                QModelIndex idx = m_scoremodel->index(i);
+                m_scoremodel->setData(idx, 0, ScoreModel::MarkRole);
+                m_scoremodel->setData(idx, 0, ScoreModel::IssuerRole);
+            }*/
+            return;
+        }
+        QModelIndex idx;// = m_scoremodel->index(_current);
+        bool find = false;
+        for (int i = m_scoremodel->rowCount() - 1; i > 0; i--) {
+            QModelIndex idxn = m_scoremodel->index(i);
+            if (m_scoremodel->data(idxn, ScoreModel::IssuerRole).toInt() == 1 && m_scoremodel->data(idxn, ScoreModel::MarkRole).toInt() < 0){
+                find = true;
+                idx = idxn;
+                break;
+            }
+        }
+        if (!find){
+            return;
+        }
+
+        int sum = 0;
+        for (int i = 0; i < m_public.count(); i++){
+            for (const ScoreMark &mark : std::as_const(m_public[i].marks)) {
+                if (m_scoremodel->data(idx, ScoreModel::ParticipantRole).toString() == mark.to) {
+                    sum += mark.amount;
+                }
+            }
+        }
+        int total = m_scoremodel->data(idx, ScoreModel::PointsRole).toInt() + sum;
+        m_scoremodel->setData(idx, total, ScoreModel::PointsRole);
+        m_scoremodel->setData(idx, sum, ScoreModel::MarkRole);
+        m_scoremodel->setData(idx, 1, ScoreModel::IssuerRole);
+        reorder();
+        setcurrentP(_current - 1);
+        setreadyP(false);
     }
 
     void reorder() {
