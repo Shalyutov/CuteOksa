@@ -17,6 +17,7 @@ qt_add_qml_module(cuteoksa
     QML_FILES
         Main.qml
         RESOURCES images/esc.png
+        RESOURCES images/esc_s.png
         RESOURCES images/flag.png
         QML_FILES HeartImage.qml
         QML_FILES HeartPanel.qml

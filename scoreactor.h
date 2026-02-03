@@ -214,7 +214,7 @@ public:
             for (int i = curr; i < m_scoremodel->rowCount(); i++) {
                 QModelIndex idx = m_scoremodel->index(i);
                 int points = m_scoremodel->data(idx, ScoreModel::PointsRole).toInt();
-                if (points >= max) {
+                if (points > max) {
                     max = points;
                     maxIdx = i;
                 }

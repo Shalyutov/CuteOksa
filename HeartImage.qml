@@ -262,7 +262,7 @@ Item {
             maskEnabled: true
             source: ggg
             maskSource: Image {
-                source: "images/esc.png"
+                source: "images/esc_s.png"
             }
         }
     }
