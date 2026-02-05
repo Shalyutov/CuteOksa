@@ -12,9 +12,38 @@ Item {
             name: "ON"
         }
     ]
+    transitions: [
+        Transition {
+            from: "ON"
+            to: "OFF"
+            SequentialAnimation {
+
+                PropertyAnimation {
+                    target: fffd
+                    property: "opacity"
+                    //from: 0.0
+                    to: 1.0
+                    duration: 200
+                }
+            }
+        },
+        Transition {
+            from: "OFF"
+            to: "ON"
+            PropertyAnimation {
+                target: fffd
+                property: "opacity"
+                //from: 1.0
+                to: 0.0
+                duration: 200
+            }
+        }
+    ]
     required property color heartColor
     required property int delay
+    required property bool inverted
     Rectangle {
+        id: fffd
         color: "transparent"
 
         Column {
@@ -22,16 +51,18 @@ Item {
             Row {
                     spacing: -2
                     Repeater{
+                        id: rep2
                         model: 15
                         Item {
                             height: 20
                             width: 20
                             required property int index
+                            //required property int count
                             HeartSmallPanel {
 
                             height: 20
                             width: 20
-                            indexP: index + delay
+                            indexP: inverted ? rep2.count - index + delay : index + delay
                             state: qaes.state
                             heartColor: qaes.heartColor
                             }
@@ -42,17 +73,19 @@ Item {
             Row {
                     spacing: -2
                     Repeater{
+                        id: rep1
                         model: 15
 
                         delegate: Item {
                             height: 20
                             width: 20
                             required property int index
+                            //required property int count
                             HeartSmallPanel {
 
                             height: 20
                             width: 20
-                            indexP: index + delay
+                            indexP: inverted ? rep1.count - index + delay : index + delay //index + delay
                             state: qaes.state
                             heartColor: qaes.heartColor
                             }
@@ -63,16 +96,18 @@ Item {
             Row {
                     spacing: -2
                     Repeater{
+                        id: rep
                         model: 15
                         delegate: Item {
                             height: 20
                             width: 20
                             required property int index
+                            //required property int count
                             HeartSmallPanel {
 
                             height: 20
                             width: 20
-                            indexP: index + delay
+                            indexP: inverted ? rep.count - index + delay : index + delay //index + delay
                             state: qaes.state
                             heartColor: qaes.heartColor
                             }

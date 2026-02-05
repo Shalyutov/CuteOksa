@@ -21,12 +21,15 @@ GridView {
             name: "ON"
         }
     ]
+    //+ (dispTrans.ViewTransition.index -
+    //dispTrans.ViewTransition.targetIndexes[0]) * 50
 
     moveDisplaced: Transition {
+        id: dispTrans
         SequentialAnimation{
 
             PauseAnimation {
-                duration: 4000
+                duration: 4000 //+ (dispTrans.ViewTransition.targetIndexes[0]) * 50
             }
             NumberAnimation { properties: "x,y"; duration: 500; easing.type: Easing.OutCubic}
         }
@@ -34,20 +37,24 @@ GridView {
     }
 
     move: Transition {
+        id: dispTrans2
         SequentialAnimation{
 
             PauseAnimation {
-                duration: 4000
+                duration: 4000 //+ (dispTrans2.ViewTransition.index -
+                                 // dispTrans2.ViewTransition.targetIndexes[0]) * 50
             }
             NumberAnimation { properties: "x,y"; duration: 500; easing.type: Easing.OutCubic}
         }
 
     }
     displaced: Transition {
+        id: dispTrans3
             SequentialAnimation{
 
                 PauseAnimation {
-                    duration: 4000
+                    duration: 4000 //+ (dispTrans3.ViewTransition.index -
+                                    //  dispTrans3.ViewTransition.targetIndexes[0]) * 50
                 }
                 NumberAnimation { properties: "x,y"; duration: 500; easing.type: Easing.OutCubic}
             }
@@ -120,7 +127,7 @@ GridView {
                 height: 50
                 clip: true
                 state: qae.state
-                heartImage: participant == "Россия" ? "images/rus.png" : "images/flag.png"
+                heartImage: participant == "Россия" ? "images/rus.png" : "images/esc_s.png"
                 indexP: (2 * (index/13))
             }
             Rectangle{
@@ -135,6 +142,27 @@ GridView {
                     heartColor: "indigo"
                     state: qae.state
                     delay: 0 + (1 * ((index/13)))
+                    inverted: false
+                }
+                HeartBackground{
+                    width: 250
+                    height: 50
+                    clip: true
+                    heartColor: "cyan"
+                    state: mark == 12 && issuer == 0 ? qae.state : "ON"
+                    inverted: true
+                    delay: 4
+                    opacity: mark > 0 && mark == 12 ? 1.0 : 0.0
+                }
+                HeartBackground{
+                    width: 250
+                    height: 50
+                    clip: true
+                    heartColor: "magenta"
+                    state: mark >= 0 && issuer == 1 ? qae.state : "ON"
+                    inverted: true
+                    delay: 4
+                    opacity: mark >= 0 && issuer == 1 ? 1.0 : 0.0
                 }
                 Rectangle {
                     id: ccv
@@ -181,7 +209,7 @@ GridView {
                         width: 50
                         height: 50
                         clip: true
-                        heartColor: "violet"
+                        heartColor: "magenta"
                         state: mark > 0 && mark < 12 ? qae.state : "ON"
                         indexP: 8 + 4 + (1 * ((index/13)))
                         opacity: mark > 0 && mark < 12 ? 1.0 : 0.0
@@ -195,19 +223,232 @@ GridView {
                         indexP: 0
                         opacity: mark > 0 && mark == 12 ? 1.0 : 0.0
                     }
-                    Text {
-                        text:  mark //points //Math.floor(anim).toFixed(0)
-                        anchors.fill: parent
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                        opacity: (qae.state === "OFF" ? 1.0 : 0.0)
+                    HeartPanel {
+                        width: 50
+                        height: 50
+                        clip: true
+                        heartColor: "magenta"
+                        state: mark > 0 && mark == 12 ? qae.state : "ON"
+                        indexP: 30
+                        opacity: mark > 0 && mark == 12 ? 1.0 : 0.0
+                    }
+                    Rectangle {
+                        id: ddfm
+                        state: mark > 0 && mark < 12 ? qae.state : "ON"
+                        x: 0
+                        y: 0
+                        width: 50
+                        height: 50
+                        clip: true
+                        color: "transparent"
+                        opacity: 0.0//mark > 0 && mark < 12 ? 1.0 : 0.0
+                        states: [
+                            State {
+                                name: "ON"
+                            },
+                            State {
+                                name: "OFF"
+                            }
+                        ]
+                        transitions: [
+                            Transition {
+                                from: "ON"
+                                to: "OFF"
+                                SequentialAnimation {
 
-                        color: mark == 12 ? "purple" : "white"
+                                    PauseAnimation {
+                                        duration: 100 * (8 + 4 + (1 * ((index/13))))
+                                    }
+                                    PropertyAnimation {
+                                        target: ddfm
+                                        property: "opacity"
+                                        //from: 0.0
+                                        to: 1.0
+                                        duration: 200
+                                    }
+                                }
+                            },
+                            Transition {
+                                from: "OFF"
+                                to: "ON"
+                                PropertyAnimation {
+                                    target: ddfm
+                                    property: "opacity"
+                                    //from: 1.0
+                                    to: 0.0
+                                    duration: 200
+                                }
+                            }
+                        ]
+                        Text {
+                            id: marktext
+                            text:  mark //points //Math.floor(anim).toFixed(0)
+                            anchors.fill: parent
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            opacity: (qae.state === "OFF" ? 1.0 : 0.0)
 
-                        font.family: fontv.name
-                        font.pixelSize: 20;
-                        font.bold: true;
+                            color: mark == 12 ? "purple" : "white"
 
+                            font.family: fontv.name
+                            font.pixelSize: 20;
+                            font.bold: true;
+
+                            state: mark == 12 ? qae.state : "ON"
+                            states: [
+                                State {
+                                    name: "ON"
+                                },
+                                State {
+                                    name: "OFF"
+                                }
+                            ]
+                            transitions: [
+                                Transition {
+                                    from: "ON"
+                                    to: "OFF"
+                                    SequentialAnimation {
+                                        ColorAnimation {
+                                            target: marktext
+                                            property: "color"
+                                            //from: 0.0
+                                            to: "purple"
+                                            duration: 200
+                                        }
+
+                                        PauseAnimation {
+                                            duration: 3000
+                                        }
+                                        ColorAnimation {
+                                            target: marktext
+                                            property: "color"
+                                            //from: 0.0
+                                            to: "white"
+                                            duration: 200
+                                        }
+                                    }
+                                },
+                                Transition {
+                                    from: "OFF"
+                                    to: "ON"
+                                    ColorAnimation {
+                                        target: marktext
+                                        property: "color"
+                                        //from: 0.0
+                                        to: "white"
+                                        duration: 200
+                                    }
+                                }
+                            ]
+
+                        }
+                    }
+                    Rectangle {
+                        id: ddfp
+                        state: mark > 0 && mark == 12 ? qae.state : "ON"
+                        x: 0
+                        y: 0
+                        width: 50
+                        height: 50
+                        clip: true
+                        color: "transparent"
+                        opacity: 0.0
+                        states: [
+                            State {
+                                name: "ON"
+                            },
+                            State {
+                                name: "OFF"
+                            }
+                        ]
+                        transitions: [
+                            Transition {
+                                from: "ON"
+                                to: "OFF"
+                                SequentialAnimation {
+
+                                    PropertyAnimation {
+                                        target: ddfp
+                                        property: "opacity"
+                                        //from: 0.0
+                                        to: 1.0
+                                        duration: 200
+                                    }
+                                }
+                            },
+                            Transition {
+                                from: "OFF"
+                                to: "ON"
+                                PropertyAnimation {
+                                    target: ddfp
+                                    property: "opacity"
+                                    //from: 1.0
+                                    to: 0.0
+                                    duration: 200
+                                }
+                            }
+                        ]
+                        Text {
+                            id: marktex
+                            text:  mark //points //Math.floor(anim).toFixed(0)
+                            anchors.fill: parent
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            opacity: (qae.state === "OFF" ? 1.0 : 0.0)
+
+                            //color: mark == 12 ? "purple" : "white"
+
+                            font.family: fontv.name
+                            font.pixelSize: 20;
+                            font.bold: true;
+
+                            state: mark == 12 ? qae.state : "ON"
+                            states: [
+                                State {
+                                    name: "ON"
+                                },
+                                State {
+                                    name: "OFF"
+                                }
+                            ]
+                            transitions: [
+                                Transition {
+                                    from: "ON"
+                                    to: "OFF"
+                                    SequentialAnimation {
+                                        ColorAnimation {
+                                            target: marktex
+                                            property: "color"
+                                            //from: 0.0
+                                            to: "purple"
+                                            duration: 200
+                                        }
+
+                                        PauseAnimation {
+                                            duration: 3000
+                                        }
+                                        ColorAnimation {
+                                            target: marktex
+                                            property: "color"
+                                            //from: 0.0
+                                            to: "white"
+                                            duration: 200
+                                        }
+                                    }
+                                },
+                                Transition {
+                                    from: "OFF"
+                                    to: "ON"
+                                    ColorAnimation {
+                                        target: marktex
+                                        property: "color"
+                                        //from: 0.0
+                                        to: "white"
+                                        duration: 200
+                                    }
+                                }
+                            ]
+                        }
                     }
                 }
                 Rectangle{
@@ -264,19 +505,68 @@ GridView {
                         indexP: 0
                         opacity: mark >= 0 && issuer == 1 ? 1.0 : 0.0
                     }
-                    Text {
-                        text:  mark //points //Math.floor(anim).toFixed(0)
-                        anchors.fill: parent
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                        opacity: (qae.state === "OFF" ? 1.0 : 0.0)
+                    Rectangle {
+                        id: ddfi
+                        state: qae.state //juryState
+                        x: 0
+                        y: 0
+                        width: 50
+                        height: 50
+                        clip: true
+                        color: "transparent"
+                        opacity: 0.0
+                        states: [
+                            State {
+                                name: "ON"
+                            },
+                            State {
+                                name: "OFF"
+                            }
+                        ]
+                        transitions: [
+                            Transition {
+                                from: "ON"
+                                to: "OFF"
+                                SequentialAnimation {
 
-                        color: "white"
+                                    PauseAnimation {
+                                        duration: 100 * (10 + (1 * ((index/13) )))
+                                    }
+                                    PropertyAnimation {
+                                        target: ddfi
+                                        property: "opacity"
+                                        //from: 0.0
+                                        to: 1.0
+                                        duration: 200
+                                    }
+                                }
+                            },
+                            Transition {
+                                from: "OFF"
+                                to: "ON"
+                                PropertyAnimation {
+                                    target: ddfi
+                                    property: "opacity"
+                                    //from: 1.0
+                                    to: 0.0
+                                    duration: 200
+                                }
+                            }
+                        ]
+                        Text {
+                            text:  mark //points //Math.floor(anim).toFixed(0)
+                            anchors.fill: parent
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            opacity: (qae.state === "OFF" ? 1.0 : 0.0)
 
-                        font.family: fontv.name
-                        font.pixelSize: 20;
-                        font.bold: true;
+                            color: "white"
 
+                            font.family: fontv.name
+                            font.pixelSize: 20;
+                            font.bold: true;
+
+                        }
                     }
                 }
 
@@ -304,22 +594,69 @@ GridView {
                     state: qae.state
                     delay: 10 + (1 * ((index/13) ))
                 }
-                Text {
-                    text: Math.floor(anim).toFixed(0) //points
-                    anchors.fill: parent
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    opacity: (qae.state === "OFF" ? 1.0 : 0.0)
+                Rectangle {
+                    id: ddf
+                    state: qae.state //juryState
+                    x: 0
+                    y: 0
+                    width: 50
+                    height: 50
+                    clip: true
+                    color: "transparent"
+                    opacity: 0.0
+                    states: [
+                        State {
+                            name: "ON"
+                        },
+                        State {
+                            name: "OFF"
+                        }
+                    ]
+                    transitions: [
+                        Transition {
+                            from: "ON"
+                            to: "OFF"
+                            SequentialAnimation {
 
-                    color: "black" //points == 12 ? "purple" : "black"
+                                PauseAnimation {
+                                    duration: 100 * (10 + (1 * ((index/13) )))
+                                }
+                                PropertyAnimation {
+                                    target: ddf
+                                    property: "opacity"
+                                    //from: 0.0
+                                    to: 1.0
+                                    duration: 200
+                                }
+                            }
+                        },
+                        Transition {
+                            from: "OFF"
+                            to: "ON"
+                            PropertyAnimation {
+                                target: ddf
+                                property: "opacity"
+                                //from: 1.0
+                                to: 0.0
+                                duration: 200
+                            }
+                        }
+                    ]
+                    Text {
+                        text: Math.floor(anim).toFixed(0) //points
+                        anchors.fill: parent
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        opacity: (qae.state === "OFF" ? 1.0 : 0.0)
 
-                    font.family: fontv.name
-                    font.pixelSize: 20
-                    font.bold: true
+                        color: "black" //points == 12 ? "purple" : "black"
 
-
-
+                        font.family: fontv.name
+                        font.pixelSize: 20
+                        font.bold: true
+                    }
                 }
+
             }
 
 

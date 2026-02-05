@@ -46,6 +46,7 @@ public:
     void addScore(const Score &score);
 
     int rowCount(const QModelIndex & parent = QModelIndex()) const;
+    Q_INVOKABLE int rowMarkedCount() const;
 
     QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
 

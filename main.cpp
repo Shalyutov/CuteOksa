@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
         model.addScore(Score(country.toString(), 0, 0, 0));
     }
 
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 13; i++) {
         juryModel.addScore(Score("", 0, 0, 0));
     }
 

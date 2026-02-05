@@ -62,6 +62,16 @@ int ScoreModel::rowCount(const QModelIndex & parent) const {
     return m_scores.count();
 }
 
+int ScoreModel::rowMarkedCount() const {
+    int count = 0;
+    for (auto &score : std::as_const(m_scores)){
+        if (score.mark() > 0 && score.issuer() == 0){
+            count++;
+        }
+    }
+    return count;
+}
+
 QVariant ScoreModel::data(const QModelIndex & index, int role) const {
     if (index.row() < 0 || index.row() >= m_scores.count())
         return QVariant();

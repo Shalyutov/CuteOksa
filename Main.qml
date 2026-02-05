@@ -6,7 +6,7 @@ Window {
     height: 800
     visible: true
     title: qsTr("Scoreboard")
-    color: "black"
+    color: "green"
     x: 100
     y: 100
 
@@ -163,6 +163,7 @@ Window {
         x: 350
         y: 150
         model: modelj
+        countMarked: actorv.markedCount
         //visible: getJuryVisible()
         juryState: getJuryState()
 
@@ -242,6 +243,10 @@ Window {
                                 //qae.state = "ON";
                                 actorv.juryReveal();
                                 actorv.publicReveal();
+                                event.accepted = true;
+            } else             if (event.key === Qt.Key_Escape) {
+                                //qae.state = "ON";
+                                actorv.reset();
                                 event.accepted = true;
             }
         }

@@ -28,6 +28,8 @@ class ScoreActor : public QObject
     Q_PROPERTY(int readyP READ readyP WRITE setreadyP NOTIFY readyPChanged)
     Q_PROPERTY(int readyHighP READ readyHighP WRITE setreadyHighP NOTIFY readyHighPChanged)
 
+    Q_PROPERTY(int markedCount READ markedCount WRITE setMarkedCount NOTIFY markedCountChanged)
+
 signals:
     void giveMarksPChanged();
     void giveHighMarkPChanged();
@@ -35,6 +37,7 @@ signals:
     void currentPChanged();
     void readyPChanged();
     void readyHighPChanged();
+    void markedCountChanged();
 
 public:
     explicit ScoreActor (QObject* parent = 0,
@@ -73,6 +76,10 @@ public:
 
     int currentP(){
         return _current;
+    }
+
+    int markedCount() {
+        return _markedCount;
     }
 
     void setgiveMarksP(const bool &arg){
@@ -123,7 +130,13 @@ public:
         }
     }
 
-
+    void setMarkedCount(const int &arg){
+        if(_markedCount != arg)
+        {
+            _markedCount = arg;
+            emit markedCountChanged();
+        }
+    }
 
     /////////////
 
@@ -178,7 +191,7 @@ public:
                     }
                 }
             }
-
+            countMarked();
             setgiveMarksP(true);
         }
         else if (giveMarks && !giveHighMark) {
@@ -211,6 +224,12 @@ public:
                 m_scoremodel->setData(idx, 0, ScoreModel::MarkRole);
                 m_scoremodel->setData(idx, 0, ScoreModel::IssuerRole);
             }
+            for (int i = 0; i < m_jurymodel->rowCount(); i++) {
+                QModelIndex idxu = m_jurymodel->index(i);
+                m_jurymodel->setData(idxu, 0, ScoreModel::MarkRole);
+                m_jurymodel->setData(idxu, 0, ScoreModel::IssuerRole);
+            }
+            countMarked();
         }
     }
 
@@ -280,10 +299,35 @@ public:
     }
 
     Q_INVOKABLE void reset(){
-        _current = 0;
+        setcurrentP(0);
         setjuryP(true);
+        setreadyP(false);
+        setreadyHighP(false);
         setgiveMarksP(false);
         setgiveHighMarkP(false);
+        for (int i = 0; i < m_scoremodel->rowCount(); i++) {
+            QModelIndex idx = m_scoremodel->index(i);
+            m_scoremodel->setData(idx, 0, ScoreModel::PointsRole);
+            m_scoremodel->setData(idx, 0, ScoreModel::MarkRole);
+            m_scoremodel->setData(idx, 0, ScoreModel::IssuerRole);
+        }
+        for (int i = 0; i < m_jurymodel->rowCount(); i++) {
+            QModelIndex idxu = m_jurymodel->index(i);
+            m_jurymodel->setData(idxu, 0, ScoreModel::MarkRole);
+            m_jurymodel->setData(idxu, 0, ScoreModel::IssuerRole);
+        }
+        countMarked();
+    }
+
+    void countMarked(){
+        int count = 0;
+        for (int i = 0; i < m_jurymodel->rowCount(); i++) {
+            QModelIndex idx = m_jurymodel->index(i);
+            if (m_jurymodel->data(idx, ScoreModel::MarkRole).toInt() > 0 && m_jurymodel->data(idx, ScoreModel::IssuerRole).toInt() == 0){
+                count++;
+            }
+        }
+        setMarkedCount(count);
     }
 
 protected:
@@ -292,6 +336,7 @@ protected:
     QList<CountryScore> m_jury;
     QList<CountryScore> m_public;
     int _current = 0;
+    int _markedCount = 0;
     bool _jury = true;
     bool ready = false;
     bool readyHigh = false;
