@@ -27,11 +27,12 @@ GridView {
     moveDisplaced: Transition {
         id: dispTrans
         SequentialAnimation{
-
             PauseAnimation {
                 duration: 4000 //+ (dispTrans.ViewTransition.targetIndexes[0]) * 50
             }
-            NumberAnimation { properties: "x,y"; duration: 500; easing.type: Easing.OutCubic}
+            NumberAnimation {
+                properties: "x,y"; duration: 1000; easing.type: Easing.OutCubic
+            }
         }
 
     }
@@ -44,7 +45,7 @@ GridView {
                 duration: 4000 //+ (dispTrans2.ViewTransition.index -
                                  // dispTrans2.ViewTransition.targetIndexes[0]) * 50
             }
-            NumberAnimation { properties: "x,y"; duration: 500; easing.type: Easing.OutCubic}
+            NumberAnimation { properties: "x,y"; duration: 1000; easing.type: Easing.OutCubic}
         }
 
     }
@@ -56,7 +57,7 @@ GridView {
                     duration: 4000 //+ (dispTrans3.ViewTransition.index -
                                     //  dispTrans3.ViewTransition.targetIndexes[0]) * 50
                 }
-                NumberAnimation { properties: "x,y"; duration: 500; easing.type: Easing.OutCubic}
+                NumberAnimation { properties: "x,y"; duration: 1000; easing.type: Easing.OutCubic}
             }
 
         }
@@ -128,7 +129,7 @@ GridView {
                 clip: true
                 state: qae.state
                 heartImage: participant == "Россия" ? "images/rus.png" : "images/esc_s.png"
-                indexP: (2 * (index/13))
+                indexP: (1 * ((index+1)%14))
             }
             Rectangle{
                 width: 200
@@ -141,8 +142,72 @@ GridView {
                     clip: true
                     heartColor: "indigo"
                     state: qae.state
-                    delay: 0 + (1 * ((index/13)))
+                    delay: 0 + (1 * ((index+1)%14))
                     inverted: false
+                }
+                Rectangle {
+                    id: ccv
+                    x: 0
+                    y: 0
+                    width: 250
+                    height: 50
+                    clip: true
+                    color: "transparent"
+                    opacity: 0.0
+                    state: qae.state
+                    states: [
+                        State {
+                            name: "ON"
+                        },
+                        State {
+                            name: "OFF"
+                        }
+                    ]
+                    transitions: [
+                        Transition {
+                            from: "ON"
+                            to: "OFF"
+                            SequentialAnimation {
+
+                                PauseAnimation {
+                                    duration: 100 * (6 + (1 * ((index+1)%14)))
+                                }
+                                PropertyAnimation {
+                                    target: ccv
+                                    property: "opacity"
+                                    //from: 0.0
+                                    to: 1.0
+                                    duration: 200
+                                }
+                            }
+                        },
+                        Transition {
+                            from: "OFF"
+                            to: "ON"
+                            PropertyAnimation {
+                                target: ccv
+                                property: "opacity"
+                                //from: 1.0
+                                to: 0.0
+                                duration: 200
+                            }
+                        }
+                    ]
+
+                    Text {
+                        text: participant
+                        anchors.fill: parent
+                        anchors.leftMargin: 16
+                        horizontalAlignment: Text.AlignLeft
+                        verticalAlignment: Text.AlignVCenter
+                        //opacity: 0.0 // (qae.state === "OFF" ? 1.0 : 0.0)
+
+                        color: 'white'
+
+                        font.family: fontv.name
+                        font.pixelSize: 22;
+                        font.bold: true;
+                    }
                 }
                 HeartBackground{
                     width: 250
@@ -153,6 +218,70 @@ GridView {
                     inverted: true
                     delay: 4
                     opacity: mark > 0 && mark == 12 ? 1.0 : 0.0
+                }
+                Rectangle {
+                    id: ccz
+                    x: 0
+                    y: 0
+                    width: 250
+                    height: 50
+                    clip: true
+                    color: "transparent"
+                    opacity: 0.0
+                    state: mark == 12 && issuer == 0 ? qae.state : "ON"
+                    states: [
+                        State {
+                            name: "ON"
+                        },
+                        State {
+                            name: "OFF"
+                        }
+                    ]
+                    transitions: [
+                        Transition {
+                            from: "ON"
+                            to: "OFF"
+                            SequentialAnimation {
+
+                                PauseAnimation {
+                                    duration: 1500 //100 * (6 + (1 * ((index+1)%14)))
+                                }
+                                PropertyAnimation {
+                                    target: ccz
+                                    property: "opacity"
+                                    //from: 0.0
+                                    to: 1.0
+                                    duration: 200
+                                }
+                            }
+                        },
+                        Transition {
+                            from: "OFF"
+                            to: "ON"
+                            PropertyAnimation {
+                                target: ccz
+                                property: "opacity"
+                                //from: 1.0
+                                to: 0.0
+                                duration: 200
+                            }
+                        }
+                    ]
+
+                    Text {
+                        text: participant
+                        anchors.fill: parent
+                        anchors.leftMargin: 16
+                        horizontalAlignment: Text.AlignLeft
+                        verticalAlignment: Text.AlignVCenter
+                        //opacity: 0.0 // (qae.state === "OFF" ? 1.0 : 0.0)
+
+                        color: 'indigo'
+
+                        font.family: fontv.name
+                        font.pixelSize: 22;
+                        font.bold: true;
+                    }
                 }
                 HeartBackground{
                     width: 250
@@ -165,14 +294,53 @@ GridView {
                     opacity: mark >= 0 && issuer == 1 ? 1.0 : 0.0
                 }
                 Rectangle {
-                    id: ccv
+                    id: ccq
                     x: 0
                     y: 0
                     width: 250
                     height: 50
                     clip: true
                     color: "transparent"
+                    opacity: 0.0
+                    state: mark >= 0 && issuer == 1 ? qae.state : "ON"
+                    states: [
+                        State {
+                            name: "ON"
+                        },
+                        State {
+                            name: "OFF"
+                        }
+                    ]
+                    transitions: [
+                        Transition {
+                            from: "ON"
+                            to: "OFF"
+                            SequentialAnimation {
 
+                                PauseAnimation {
+                                    duration: 1500 //100 * (6 + (1 * ((index+1)%14)))
+                                }
+                                PropertyAnimation {
+                                    target: ccq
+                                    property: "opacity"
+                                    //from: 0.0
+                                    to: 1.0
+                                    duration: 200
+                                }
+                            }
+                        },
+                        Transition {
+                            from: "OFF"
+                            to: "ON"
+                            PropertyAnimation {
+                                target: ccq
+                                property: "opacity"
+                                //from: 1.0
+                                to: 0.0
+                                duration: 200
+                            }
+                        }
+                    ]
 
                     Text {
                         text: participant
@@ -180,9 +348,9 @@ GridView {
                         anchors.leftMargin: 16
                         horizontalAlignment: Text.AlignLeft
                         verticalAlignment: Text.AlignVCenter
-                        opacity: (qae.state === "OFF" ? 1.0 : 0.0)
+                        //opacity: 0.0 // (qae.state === "OFF" ? 1.0 : 0.0)
 
-                        color: 'white'
+                        color: 'indigo'
 
                         font.family: fontv.name
                         font.pixelSize: 22;
@@ -210,31 +378,31 @@ GridView {
                         height: 50
                         clip: true
                         heartColor: "magenta"
-                        state: mark > 0 && mark < 12 ? qae.state : "ON"
-                        indexP: 8 + 4 + (1 * ((index/13)))
-                        opacity: mark > 0 && mark < 12 ? 1.0 : 0.0
+                        state: mark > 0 && mark < 12 && issuer == 0 ? qae.state : "ON"
+                        indexP: 8 + 4 + (1 * ((index+1)%14))
+                        opacity: mark > 0 && mark < 12 && issuer == 0  ? 1.0 : 0.0
                     }
                     HeartPanel {
                         width: 50
                         height: 50
                         clip: true
                         heartColor: "cyan"
-                        state: mark > 0 && mark == 12 ? qae.state : "ON"
+                        state: mark > 0 && mark == 12 && issuer == 0  ? qae.state : "ON"
                         indexP: 0
-                        opacity: mark > 0 && mark == 12 ? 1.0 : 0.0
+                        opacity: mark > 0 && mark == 12 && issuer == 0  ? 1.0 : 0.0
                     }
                     HeartPanel {
                         width: 50
                         height: 50
                         clip: true
                         heartColor: "magenta"
-                        state: mark > 0 && mark == 12 ? qae.state : "ON"
+                        state: mark > 0 && mark == 12 && issuer == 0  ? qae.state : "ON"
                         indexP: 30
-                        opacity: mark > 0 && mark == 12 ? 1.0 : 0.0
+                        opacity: mark > 0 && mark == 12 && issuer == 0  ? 1.0 : 0.0
                     }
                     Rectangle {
                         id: ddfm
-                        state: mark > 0 && mark < 12 ? qae.state : "ON"
+                        state: mark > 0 && mark < 12 && issuer == 0  ? qae.state : "ON"
                         x: 0
                         y: 0
                         width: 50
@@ -257,7 +425,7 @@ GridView {
                                 SequentialAnimation {
 
                                     PauseAnimation {
-                                        duration: 100 * (8 + 4 + (1 * ((index/13))))
+                                        duration: 100 * (8 + 4 + (1 * ((index+1)%14)))
                                     }
                                     PropertyAnimation {
                                         target: ddfm
@@ -288,13 +456,13 @@ GridView {
                             verticalAlignment: Text.AlignVCenter
                             opacity: (qae.state === "OFF" ? 1.0 : 0.0)
 
-                            color: mark == 12 ? "purple" : "white"
+                            color: mark == 12 && issuer == 0 ? "purple" : "white"
 
                             font.family: fontv.name
                             font.pixelSize: 20;
                             font.bold: true;
 
-                            state: mark == 12 ? qae.state : "ON"
+                            state: mark == 12 && issuer == 0  ? qae.state : "ON"
                             states: [
                                 State {
                                     name: "ON"
@@ -345,7 +513,7 @@ GridView {
                     }
                     Rectangle {
                         id: ddfp
-                        state: mark > 0 && mark == 12 ? qae.state : "ON"
+                        state: mark > 0 && mark == 12 && issuer == 0 ? qae.state : "ON"
                         x: 0
                         y: 0
                         width: 50
@@ -402,7 +570,7 @@ GridView {
                             font.pixelSize: 20;
                             font.bold: true;
 
-                            state: mark == 12 ? qae.state : "ON"
+                            state: mark == 12 && issuer == 0  ? qae.state : "ON"
                             states: [
                                 State {
                                     name: "ON"
@@ -530,7 +698,7 @@ GridView {
                                 SequentialAnimation {
 
                                     PauseAnimation {
-                                        duration: 100 * (10 + (1 * ((index/13) )))
+                                        duration: 100 * (10 + (1 * ((index+1)%14 )))
                                     }
                                     PropertyAnimation {
                                         target: ddfi
@@ -592,7 +760,7 @@ GridView {
                     clip: true
                     heartColor: "white" //points == 12 ? "cyan" : "white"
                     state: qae.state
-                    delay: 10 + (1 * ((index/13) ))
+                    delay: 10 + (1 * ((index+1)%14 ))
                 }
                 Rectangle {
                     id: ddf
@@ -619,7 +787,7 @@ GridView {
                             SequentialAnimation {
 
                                 PauseAnimation {
-                                    duration: 100 * (10 + (1 * ((index/13) )))
+                                    duration: 100 * (10 + (1 * ((index+1)%14)))
                                 }
                                 PropertyAnimation {
                                     target: ddf

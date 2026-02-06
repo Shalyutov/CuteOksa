@@ -25,8 +25,9 @@ Item {
                     Item {
                         height: 20
                         width: 20
+                        clip: true
                         required property int index
-                        HeartSmallPanel {
+                        HeartSmallPanelOpt {
                             height: 20
                             width: 20
                             indexP: index + delay
@@ -43,8 +44,9 @@ Item {
                     delegate: Item {
                         height: 20
                         width: 20
+                        clip: true
                         required property int index
-                        HeartSmallPanel {
+                        HeartSmallPanelOpt {
 
                             height: 20
                             width: 20
@@ -62,8 +64,9 @@ Item {
                     delegate: Item {
                         height: 20
                         width: 20
+                        clip: true
                         required property int index
-                        HeartSmallPanel {
+                        HeartSmallPanelOpt {
                             height: 20
                             width: 20
                             indexP: index + delay

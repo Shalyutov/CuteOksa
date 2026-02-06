@@ -18,6 +18,7 @@ qt_add_qml_module(cuteoksa
         Main.qml
         RESOURCES images/esc.png
         RESOURCES images/esc_s.png
+        RESOURCES images/esc_sf.png
         RESOURCES images/flag.png
         QML_FILES HeartImage.qml
         QML_FILES HeartPanel.qml
@@ -33,6 +34,8 @@ qt_add_qml_module(cuteoksa
         QML_FILES JuryPanel.qml
         QML_FILES Scoreboard.qml
         QML_FILES HeartSquareBackground.qml
+        SOURCES scoreactor.cpp
+        QML_FILES HeartSmallPanelOpt.qml
 )
 
 qt_add_resources(cuteoksa "res"

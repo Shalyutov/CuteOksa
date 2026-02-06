@@ -1,4 +1,4 @@
-// HeartPanel.qml
+// HeartSmallPanel.qml
 import QtQuick
 import QtQuick.Effects
 
@@ -21,12 +21,6 @@ Item {
             to: "OFF"
             SequentialAnimation {
                 PropertyAnimation {
-                    target: bsw
-                    property: "opacity"
-                    to: 0.0
-                    duration: 10
-                }
-                PropertyAnimation {
                     target: ggg
                     properties: "width"
                     to: 0
@@ -40,12 +34,6 @@ Item {
                     duration: 1
                     //easing.type: Easing.OutInQuad
                 }
-                PropertyAnimation {
-                    target: bsw
-                    property: "opacity"
-                    to: 1.0
-                    duration: 10
-                }
                 /*PropertyAnimation {
                     target: bsw
                     property: "opacity"
@@ -53,38 +41,22 @@ Item {
                     to: 1.0
                     duration: 1
                 }*/
-                PauseAnimation{duration: (indexP === 0 ? 0 : (100 * indexP))}
+                PauseAnimation{duration: 100 * indexP}
                 ParallelAnimation {
                     id: kkk
                     PropertyAnimation {
-                        target: sourceImage
-                        properties: "x"
-                        from: -25
-                        to: 35
-                        duration: 1000
-                        easing.type: Easing.OutInQuad
-                    }
-                    PropertyAnimation {
-                        target: sourceImage
-                        properties: "y"
-                        from: -25
-                        to: 35
-                        duration: 1000
-                        easing.type: Easing.OutInQuad
-                    }
-                    PropertyAnimation {
                         target: ggg
                         properties: "x"
-                        from: 25
-                        to: -35
+                        from: 10
+                        to: -15
                         duration: 1000
                         easing.type: Easing.OutInQuad
                     }
                     PropertyAnimation {
                         target: ggg
                         properties: "y"
-                        from: 25
-                        to: -35
+                        from: 10
+                        to: -15
                         duration: 1000
                         easing.type: Easing.OutInQuad
                     }
@@ -92,7 +64,7 @@ Item {
                         target: ggg
                         properties: "width"
                         from: 0
-                        to: 120
+                        to: 50
                         duration: 1000
                         easing.type: Easing.OutInQuad
                     }
@@ -100,7 +72,7 @@ Item {
                         target: ggg
                         properties: "height"
                         from: 0
-                        to: 120
+                        to: 50
                         duration: 1000
                         easing.type: Easing.OutInQuad
                     }
@@ -110,18 +82,19 @@ Item {
         Transition {
             from: "OFF"
             to: "ON"
-            PropertyAnimation {
+            /*PropertyAnimation {
                 target: bsw
                 property: "opacity"
+                from: 1.0
                 to: 0.0
-                duration: 100
-            }
+                duration: 200
+            }*/
         }
     ]
-    Rectangle {
+    /*Rectangle {
         id: bsw
-        width: 50
-        height: 50
+        width: 20
+        height: 20
         //x: 200
         //y: 200
         clip: true
@@ -139,8 +112,8 @@ Item {
             Rectangle {
                 id: sourceImage
                 color: heartColor
-                width: 50
-                height: 50
+                width: 20
+                height: 20
                 x: 0
                 y: 0
                 visible: true
@@ -157,5 +130,18 @@ Item {
                 source: "images/esc_s.png"
             }
         }
-    }
+    }*/
+    Image {
+            id: ggg //sourceImage
+            source: "images/esc_sf.png"
+            width: 0
+            height: 0
+            clip: true
+            // Use layer.enabled and apply effect to the layer for performance
+            layer.enabled: true
+            layer.effect: MultiEffect {
+                colorization: 1.0 // Strength of colorization (1.0 for full effect)
+                colorizationColor: heartColor// The desired color
+            }
+        }
 }
