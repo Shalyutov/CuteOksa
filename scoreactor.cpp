@@ -58,6 +58,7 @@ void ScoreActor::juryReveal(){
                 continue;
             }
             QModelIndex bbv = m_scoremodel->index(p);
+            m_jurymodel->setData(bbv, m_countryFlags[mark.to], ScoreModel::FlagRole);
             m_jurymodel->setData(bbv, mark.to, ScoreModel::ParticipantRole);
             m_jurymodel->setData(bbv, 0, ScoreModel::IssuerRole);
             m_jurymodel->setData(bbv, mark.amount, ScoreModel::MarkRole);

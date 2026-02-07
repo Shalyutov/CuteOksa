@@ -111,6 +111,7 @@ GridView {
         required property int mark
         required property int issuer
         required property int index
+        required property string flag
 
         property real anim: points
         Behavior on anim {
@@ -128,7 +129,7 @@ GridView {
                 height: 50
                 clip: true
                 state: qae.state
-                heartImage: participant == "Россия" ? "images/rus.png" : "images/esc_s.png"
+                heartImage: flag == "" ? "images/esc_s.png" : "images/w160/" + flag + ".png"
                 indexP: (1 * ((index+1)%14))
             }
             Rectangle{

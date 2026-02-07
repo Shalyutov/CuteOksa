@@ -7,23 +7,26 @@
 class Score
 {
 public:
-    Score(const QString &participant, const int &points, const int &mark, const int &issuer);
+    Score(const QString &participant, const int &points, const int &mark, const int &issuer, const QString &flag);
 
     QString participant() const;
     int points() const;
     int mark() const;
     int issuer() const;
+    QString flag() const;
 
     void setParticipant(QString participant);
     void setPoints(int points);
     void setMark(int mark);
     void setIssuer(int issuer);
+    void setFlag(QString flag);
 
 private:
     QString m_participant;
     int m_points;
     int m_mark;
     int m_issuer;
+    QString m_flag;
 };
 
 class ScoreModel : public QAbstractListModel
@@ -38,7 +41,8 @@ public:
         ParticipantRole = Qt::UserRole + 1,
         PointsRole,
         MarkRole,
-        IssuerRole
+        IssuerRole,
+        FlagRole
     };
 
     //![1]
@@ -52,7 +56,6 @@ public:
 
     bool setData(const QModelIndex &index, const QVariant &value, int role);
 
-    bool removeRows(int row, int count, const QModelIndex &parent);
     void clearAllItems();
     Q_INVOKABLE void moveScore(int from, int to);
 

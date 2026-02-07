@@ -1,7 +1,7 @@
 #include "scoremodel.h"
 
-Score::Score(const QString &participant, const int &points, const int &mark, const int &issuer)
-    : m_participant(participant), m_points(points), m_mark(mark), m_issuer(issuer)
+Score::Score(const QString &participant, const int &points, const int &mark, const int &issuer, const QString &flag)
+    : m_participant(participant), m_points(points), m_mark(mark), m_issuer(issuer), m_flag(flag)
 {
 }
 
@@ -25,6 +25,11 @@ int Score::issuer() const
     return m_issuer;
 }
 
+QString Score::flag() const
+{
+    return m_flag;
+}
+
 void Score::setParticipant(QString participant)
 {
     m_participant = participant;
@@ -43,6 +48,11 @@ void Score::setMark(int mark)
 void Score::setIssuer(int issuer)
 {
     m_issuer = issuer;
+}
+
+void Score::setFlag(QString flag)
+{
+    m_flag = flag;
 }
 
 ScoreModel::ScoreModel(QObject *parent)
@@ -85,6 +95,8 @@ QVariant ScoreModel::data(const QModelIndex & index, int role) const {
         return score.mark();
     else if (role == IssuerRole)
         return score.issuer();
+    else if (role == FlagRole)
+        return score.flag();
     return QVariant();
 }
 
@@ -95,6 +107,7 @@ QHash<int, QByteArray> ScoreModel::roleNames() const {
     roles[PointsRole] = "points";
     roles[MarkRole] = "mark";
     roles[IssuerRole] = "issuer";
+    roles[FlagRole] = "flag";
     return roles;
 }
 //![0]
@@ -119,6 +132,9 @@ bool ScoreModel::setData(const QModelIndex &index, const QVariant &value, int ro
     case IssuerRole:
         m_scores[index.row()].setIssuer(value.toInt());
         break;
+    case FlagRole:
+        m_scores[index.row()].setFlag(value.toString());
+        break;
     default:
         return false;
     }
@@ -127,32 +143,11 @@ bool ScoreModel::setData(const QModelIndex &index, const QVariant &value, int ro
 
     return true;
 }
-//do not work
-bool ScoreModel::removeRows(int row, int count, const QModelIndex &parent) {
-
-    if (row < 0 || row + count > m_scores.length()) {
-        //return false;
-    }
-
-    beginRemoveRows(parent, row, row + count - 1);
-
-    while (count--) m_scores.removeAt(row);
-
-
-    endRemoveRows();
-
-    return true;
-}
 
 void ScoreModel::clearAllItems()
 {
-    // Notify views that the model is about to be reset
     beginResetModel();
-
-    // Clear your underlying data structure (e.g., QList, QVector, etc.)
     m_scores.clear();
-
-    // Notify views that the model has been reset
     endResetModel();
 }
 

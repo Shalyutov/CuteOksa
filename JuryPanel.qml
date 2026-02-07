@@ -61,6 +61,7 @@ GridView {
         required property string participant
         required property int points
         required property int mark
+        required property string flag
 
         property int delayIdx: countMarked - index % countMarked
 
@@ -83,7 +84,7 @@ GridView {
             height: 50
             clip: true
             state: juryState
-            heartImage: participant == "Россия" ? "images/rus.png" : "images/esc_s.png"
+            heartImage: flag == "" ? "images/esc_s.png" : "images/w160/" + flag + ".png"
             indexP: (2 * (delayIdx))
         }
         Rectangle {

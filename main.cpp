@@ -9,7 +9,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QString>
-
+#include <QMap>
 
 
 void loadResults () {
@@ -31,6 +31,7 @@ int main(int argc, char *argv[])
 
     ScoreModel model;
     ScoreModel juryModel;
+    QMap<QString, QString> countryFlags = QMap<QString, QString>();
 
     // load countries points
 
@@ -45,11 +46,12 @@ int main(int argc, char *argv[])
 
     QJsonArray countries = root["countries"].toArray();
     for (const QJsonValue &country : std::as_const(countries)){
-        model.addScore(Score(country.toString(), 0, 0, 0));
+        countryFlags[country["name"].toString()] = country["flag"].toString();
+        model.addScore(Score(country["name"].toString(), 0, 0, 0, country["flag"].toString()));
     }
 
     for (int i = 0; i < 13; i++) {
-        juryModel.addScore(Score("", 0, 0, 0));
+        juryModel.addScore(Score("", 0, 0, 0, ""));
     }
 
     QJsonArray jury = root["jury"].toArray();
@@ -89,12 +91,9 @@ int main(int argc, char *argv[])
 
         publicScores.append(item);
     }
-
-
-
     //
 
-    ScoreActor actor(nullptr, &model, &juryModel, juryScores, publicScores);
+    ScoreActor actor(nullptr, &model, &juryModel, juryScores, publicScores, countryFlags);
 
     QQmlApplicationEngine engine;
 

@@ -51,12 +51,14 @@ public:
                         ScoreModel* scores = nullptr,
                         ScoreModel* juryModel = nullptr,
                         QList<CountryScore> juryScores = QList<CountryScore> (),
-                        QList<CountryScore> publicScores = QList<CountryScore> ()) :
+                        QList<CountryScore> publicScores = QList<CountryScore> (),
+                        QMap<QString, QString> countryFlags = QMap<QString, QString>()) :
         QObject(parent),
         m_scoremodel(scores),
         m_jurymodel(juryModel),
         m_jury(juryScores),
-        m_public(publicScores)
+        m_public(publicScores),
+        m_countryFlags(countryFlags)
     {
         reset();
     }
@@ -180,6 +182,7 @@ protected:
     ScoreModel* m_jurymodel;
     QList<CountryScore> m_jury;
     QList<CountryScore> m_public;
+    QMap<QString, QString> m_countryFlags;
     int _current = 0;
     int _markedCount = 0;
     int _juryCount = 0;
