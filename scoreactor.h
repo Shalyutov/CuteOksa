@@ -28,6 +28,8 @@ class ScoreActor : public QObject
     Q_PROPERTY(int readyP READ readyP WRITE setreadyP NOTIFY readyPChanged)
     Q_PROPERTY(int readyHighP READ readyHighP WRITE setreadyHighP NOTIFY readyHighPChanged)
     Q_PROPERTY(int markedCount READ markedCount WRITE setMarkedCount NOTIFY markedCountChanged)
+    Q_PROPERTY(QString currentVote READ currentVote WRITE setcurrentVote NOTIFY currentVoteChanged)
+    Q_PROPERTY(int juryCount READ juryCount WRITE setjuryCount NOTIFY juryCountChanged)
 
 signals:
     void giveMarksPChanged();
@@ -37,6 +39,8 @@ signals:
     void readyPChanged();
     void readyHighPChanged();
     void markedCountChanged();
+    void currentVoteChanged();
+    void juryCountChanged();
 
 private:
     void reorder();
@@ -54,7 +58,7 @@ public:
         m_jury(juryScores),
         m_public(publicScores)
     {
-
+        reset();
     }
 
     bool giveMarksP(){
@@ -83,6 +87,14 @@ public:
 
     int markedCount() {
         return _markedCount;
+    }
+
+    QString currentVote() {
+        return _currentVote;
+    }
+
+    int juryCount() {
+        return _juryCount;
     }
 
     void setgiveMarksP(const bool &arg){
@@ -141,6 +153,22 @@ public:
         }
     }
 
+    void setcurrentVote(const QString &arg){
+        if(_currentVote != arg)
+        {
+            _currentVote = arg;
+            emit currentVoteChanged();
+        }
+    }
+
+    void setjuryCount(const int &arg){
+        if(_juryCount != arg)
+        {
+            _juryCount = arg;
+            emit juryCountChanged();
+        }
+    }
+
     Q_INVOKABLE void juryReveal();
 
     Q_INVOKABLE void publicReveal();
@@ -154,10 +182,12 @@ protected:
     QList<CountryScore> m_public;
     int _current = 0;
     int _markedCount = 0;
+    int _juryCount = 0;
     bool _jury = true;
     bool ready = false;
     bool readyHigh = false;
     bool giveMarks = false;
     bool giveHighMark = false;
+    QString _currentVote;
     ScoreMark high;
 };

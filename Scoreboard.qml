@@ -659,7 +659,7 @@ GridView {
                                 property: "opacity"
                                 //from: 1.0
                                 to: 0.0
-                                duration: 100
+                                duration: 200
                             }
                         }
                     ]

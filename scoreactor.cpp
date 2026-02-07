@@ -48,6 +48,7 @@ void ScoreActor::juryReveal(){
     if (!giveMarks && !giveHighMark) {
         if (!ready) {
             setreadyP(true);
+            setcurrentVote(m_jury[_current].from);
             return;
         }
         int p = 0;
@@ -124,6 +125,14 @@ void ScoreActor::publicReveal(){
     }
     if (!ready) {
         setreadyP(true);
+        QModelIndex idx;
+        for (int i = m_scoremodel->rowCount() - 1; i > 0; i--) {
+            QModelIndex idxn = m_scoremodel->index(i);
+            if (m_scoremodel->data(idxn, ScoreModel::IssuerRole).toInt() == 1 && m_scoremodel->data(idxn, ScoreModel::MarkRole).toInt() < 0){
+                setcurrentVote(m_scoremodel->data(idxn, ScoreModel::ParticipantRole).toString());
+                break;
+            }
+        }
         return;
     }
     QModelIndex idx;
@@ -164,6 +173,7 @@ void ScoreActor::reset(){
     setreadyHighP(false);
     setgiveMarksP(false);
     setgiveHighMarkP(false);
+    setjuryCount(m_jury.count());
     for (int i = 0; i < m_scoremodel->rowCount(); i++) {
         QModelIndex idx = m_scoremodel->index(i);
         m_scoremodel->setData(idx, 0, ScoreModel::PointsRole);

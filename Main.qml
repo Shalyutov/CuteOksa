@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Effects
 
 Window {
-    width: 1200
+    width: 1300
     height: 800
     visible: true
     title: qsTr("Scoreboard")
@@ -13,6 +13,72 @@ Window {
     FontLoader {
         id: fontv
         source: "./fonts/Manrope.ttf"
+    }
+
+    Rectangle {
+        id: ddfm
+        width: 300
+        height: 50
+        x: 850
+        y: 700
+        color: "indigo"
+        state: actorv.readyP ? "OFF" : "ON"
+        opacity: 0.0
+        states: [
+            State {
+                name: "ON"
+            },
+            State {
+                name: "OFF"
+            }
+        ]
+        transitions: [
+            Transition {
+                from: "ON"
+                to: "OFF"
+                SequentialAnimation {
+                    PropertyAnimation {
+                        target: ddfm
+                        property: "opacity"
+                        to: 1.0
+                        duration: 100
+                    }
+                }
+            },
+            Transition {
+                from: "OFF"
+                to: "ON"
+                PropertyAnimation {
+                    target: ddfm
+                    property: "opacity"
+                    to: 0.0
+                    duration: 100
+                }
+            }
+        ]
+        Text {
+            text: actorv.currentVote
+            anchors.fill: parent
+            anchors.leftMargin: 16
+            horizontalAlignment: Text.AlignLeft
+            verticalAlignment: Text.AlignVCenter
+            color: "white"
+            font.family: fontv.name
+            font.pixelSize: 20
+            font.bold: true
+        }
+        Text {
+            text: actorv.juryP ? (actorv.currentP + 1) + " из " + actorv.juryCount : (modelv.rowCount() - actorv.currentP) + " из " + modelv.rowCount()
+            anchors.fill: parent
+            anchors.rightMargin: 16
+            horizontalAlignment: Text.AlignRight
+            verticalAlignment: Text.AlignVCenter
+            color: "white"
+            font.family: fontv.name
+            font.pixelSize: 20
+            font.bold: true
+            visible: !actorv.readyP ? false : true
+        }
     }
 
     JuryPanel {
@@ -45,7 +111,7 @@ Window {
     }
 
     Scoreboard {
-        x: 150
+        x: 100
         y: 50
         model: modelv
         state: getScoreboardState()
