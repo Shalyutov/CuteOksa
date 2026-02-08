@@ -8,6 +8,7 @@ GridView {
     cellWidth: 354
     cellHeight: 54
     required model
+    required property int highMark
 
     flow: GridView.FlowTopToBottom
     layoutDirection: "LeftToRight"
@@ -131,6 +132,7 @@ GridView {
                 state: qae.state
                 heartImage: flag == "" ? "images/esc_s.png" : "images/w160/" + flag + ".png"
                 indexP: (1 * ((index+1)%14))
+                opacity: flag == "" ? 0.0 : 1.0
             }
             Rectangle{
                 width: 200
@@ -215,10 +217,10 @@ GridView {
                     height: 50
                     clip: true
                     heartColor: "cyan"
-                    state: mark == 12 && issuer == 0 ? qae.state : "ON"
+                    state: mark == highMark && issuer == 0 ? qae.state : "ON"
                     inverted: true
                     delay: 4
-                    opacity: mark > 0 && mark == 12 ? 1.0 : 0.0
+                    opacity: mark > 0 && mark == highMark ? 1.0 : 0.0
                 }
                 Rectangle {
                     id: ccz
@@ -229,7 +231,7 @@ GridView {
                     clip: true
                     color: "transparent"
                     opacity: 0.0
-                    state: mark == 12 && issuer == 0 ? qae.state : "ON"
+                    state: mark == highMark && issuer == 0 ? qae.state : "ON"
                     states: [
                         State {
                             name: "ON"
@@ -379,31 +381,31 @@ GridView {
                         height: 50
                         clip: true
                         heartColor: "magenta"
-                        state: mark > 0 && mark < 12 && issuer == 0 ? qae.state : "ON"
+                        state: mark > 0 && mark < highMark && issuer == 0 ? qae.state : "ON"
                         indexP: 8 + 4 + (1 * ((index+1)%14))
-                        opacity: mark > 0 && mark < 12 && issuer == 0  ? 1.0 : 0.0
+                        opacity: mark > 0 && mark < highMark && issuer == 0  ? 1.0 : 0.0
                     }
                     HeartPanel {
                         width: 50
                         height: 50
                         clip: true
                         heartColor: "cyan"
-                        state: mark > 0 && mark == 12 && issuer == 0  ? qae.state : "ON"
+                        state: mark > 0 && mark == highMark && issuer == 0  ? qae.state : "ON"
                         indexP: 0
-                        opacity: mark > 0 && mark == 12 && issuer == 0  ? 1.0 : 0.0
+                        opacity: mark > 0 && mark == highMark && issuer == 0  ? 1.0 : 0.0
                     }
                     HeartPanel {
                         width: 50
                         height: 50
                         clip: true
                         heartColor: "magenta"
-                        state: mark > 0 && mark == 12 && issuer == 0  ? qae.state : "ON"
+                        state: mark > 0 && mark == highMark && issuer == 0  ? qae.state : "ON"
                         indexP: 30
-                        opacity: mark > 0 && mark == 12 && issuer == 0  ? 1.0 : 0.0
+                        opacity: mark > 0 && mark == highMark && issuer == 0  ? 1.0 : 0.0
                     }
                     Rectangle {
                         id: ddfm
-                        state: mark > 0 && mark < 12 && issuer == 0  ? qae.state : "ON"
+                        state: mark > 0 && mark < highMark && issuer == 0  ? qae.state : "ON"
                         x: 0
                         y: 0
                         width: 50
@@ -457,13 +459,13 @@ GridView {
                             verticalAlignment: Text.AlignVCenter
                             opacity: (qae.state === "OFF" ? 1.0 : 0.0)
 
-                            color: mark == 12 && issuer == 0 ? "purple" : "white"
+                            color: mark == highMark && issuer == 0 ? "purple" : "white"
 
                             font.family: fontv.name
                             font.pixelSize: 20;
                             font.bold: true;
 
-                            state: mark == 12 && issuer == 0  ? qae.state : "ON"
+                            state: mark == highMark && issuer == 0  ? qae.state : "ON"
                             states: [
                                 State {
                                     name: "ON"
@@ -514,7 +516,7 @@ GridView {
                     }
                     Rectangle {
                         id: ddfp
-                        state: mark > 0 && mark == 12 && issuer == 0 ? qae.state : "ON"
+                        state: mark > 0 && mark == highMark && issuer == 0 ? qae.state : "ON"
                         x: 0
                         y: 0
                         width: 50
@@ -571,7 +573,7 @@ GridView {
                             font.pixelSize: 20;
                             font.bold: true;
 
-                            state: mark == 12 && issuer == 0  ? qae.state : "ON"
+                            state: mark == highMark && issuer == 0  ? qae.state : "ON"
                             states: [
                                 State {
                                     name: "ON"
@@ -627,7 +629,7 @@ GridView {
                     color: "transparent"
                     visible: mark >= 0 && issuer == 1 ? true : false
 
-                    state: mark >= 0 && issuer == 1 ? "OFF" : "ON"
+                    state: mark >= 0 && issuer == 1 ? qae.state : "ON"
                     states: [
                         State {
                             name: "ON"
@@ -672,7 +674,7 @@ GridView {
                         heartColor: "magenta"
                         state: mark >= 0 && issuer == 1 ? qae.state : "ON"
                         indexP: 0
-                        opacity: mark >= 0 && issuer == 1 ? 1.0 : 0.0
+                        //opacity: (qae.state === "OFF" ? 1.0 : 0.0) //mark >= 0 && issuer == 1 ? 1.0 : 0.0
                     }
                     Rectangle {
                         id: ddfi
@@ -727,7 +729,7 @@ GridView {
                             anchors.fill: parent
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
-                            opacity: (qae.state === "OFF" ? 1.0 : 0.0)
+                            //opacity: (qae.state === "OFF" ? 1.0 : 0.0)
 
                             color: "white"
 

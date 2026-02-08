@@ -30,6 +30,10 @@ class ScoreActor : public QObject
     Q_PROPERTY(int markedCount READ markedCount WRITE setMarkedCount NOTIFY markedCountChanged)
     Q_PROPERTY(QString currentVote READ currentVote WRITE setcurrentVote NOTIFY currentVoteChanged)
     Q_PROPERTY(int juryCount READ juryCount WRITE setjuryCount NOTIFY juryCountChanged)
+    Q_PROPERTY(int highMark READ highMark WRITE sethighMark NOTIFY highMarkChanged)
+    Q_PROPERTY(int currentMark READ currentMark WRITE setcurrentMark NOTIFY currentMarkChanged)
+    Q_PROPERTY(QString currentMarkTo READ currentMarkTo WRITE setcurrentMarkTo NOTIFY currentMarkToChanged)
+    Q_PROPERTY(int win READ win WRITE setwin NOTIFY winChanged)
 
 signals:
     void giveMarksPChanged();
@@ -41,6 +45,10 @@ signals:
     void markedCountChanged();
     void currentVoteChanged();
     void juryCountChanged();
+    void highMarkChanged();
+    void currentMarkChanged();
+    void currentMarkToChanged();
+    void winChanged();
 
 private:
     void reorder();
@@ -52,13 +60,15 @@ public:
                         ScoreModel* juryModel = nullptr,
                         QList<CountryScore> juryScores = QList<CountryScore> (),
                         QList<CountryScore> publicScores = QList<CountryScore> (),
-                        QMap<QString, QString> countryFlags = QMap<QString, QString>()) :
+                        QMap<QString, QString> countryFlags = QMap<QString, QString>(),
+                        int phighMark = 12) :
         QObject(parent),
         m_scoremodel(scores),
         m_jurymodel(juryModel),
         m_jury(juryScores),
         m_public(publicScores),
-        m_countryFlags(countryFlags)
+        m_countryFlags(countryFlags),
+        _highMark(phighMark)
     {
         reset();
     }
@@ -91,8 +101,22 @@ public:
         return _markedCount;
     }
 
+    int highMark() {
+        return _highMark;
+    }
+
+    int currentMark() {
+        return _currentMark;
+    }
+    int win() {
+        return _win;
+    }
+
     QString currentVote() {
         return _currentVote;
+    }
+    QString currentMarkTo() {
+        return _currentMarkTo;
     }
 
     int juryCount() {
@@ -163,11 +187,43 @@ public:
         }
     }
 
+    void setcurrentMarkTo(const QString &arg){
+        if(_currentMarkTo != arg)
+        {
+            _currentMarkTo = arg;
+            emit currentMarkToChanged();
+        }
+    }
+
     void setjuryCount(const int &arg){
         if(_juryCount != arg)
         {
             _juryCount = arg;
             emit juryCountChanged();
+        }
+    }
+
+    void sethighMark(const int &arg){
+        if(_highMark != arg)
+        {
+            _highMark = arg;
+            emit highMarkChanged();
+        }
+    }
+
+    void setcurrentMark(const int &arg){
+        if(_currentMark != arg)
+        {
+            _currentMark = arg;
+            emit currentMarkChanged();
+        }
+    }
+
+    void setwin(const int &arg){
+        if(_win != arg)
+        {
+            _win = arg;
+            emit winChanged();
         }
     }
 
@@ -186,11 +242,15 @@ protected:
     int _current = 0;
     int _markedCount = 0;
     int _juryCount = 0;
+    int _highMark = 0;
+    int _currentMark = 0;
+    int _win = 0;
     bool _jury = true;
     bool ready = false;
     bool readyHigh = false;
     bool giveMarks = false;
     bool giveHighMark = false;
     QString _currentVote;
+    QString _currentMarkTo;
     ScoreMark high;
 };

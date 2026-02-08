@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
     }
     //
 
-    ScoreActor actor(nullptr, &model, &juryModel, juryScores, publicScores, countryFlags);
+    ScoreActor actor(nullptr, &model, &juryModel, juryScores, publicScores, countryFlags, root["highMark"].toInt());
 
     QQmlApplicationEngine engine;
 

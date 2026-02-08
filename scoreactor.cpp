@@ -53,8 +53,9 @@ void ScoreActor::juryReveal(){
         }
         int p = 0;
         for (const ScoreMark &mark : std::as_const(m_jury[_current].marks)){
-            if (mark.amount == 12) {
+            if (mark.amount == _highMark) {
                 high = mark;
+                setcurrentMarkTo(mark.to);
                 continue;
             }
             QModelIndex bbv = m_scoremodel->index(p);
@@ -124,16 +125,36 @@ void ScoreActor::publicReveal(){
     if (_current < 0){
         return;
     }
+
     if (!ready) {
         setreadyP(true);
         QModelIndex idx;
+        bool find = false;
         for (int i = m_scoremodel->rowCount() - 1; i > 0; i--) {
             QModelIndex idxn = m_scoremodel->index(i);
             if (m_scoremodel->data(idxn, ScoreModel::IssuerRole).toInt() == 1 && m_scoremodel->data(idxn, ScoreModel::MarkRole).toInt() < 0){
                 setcurrentVote(m_scoremodel->data(idxn, ScoreModel::ParticipantRole).toString());
+                find = true;
+                idx = idxn;
+                if (_current == 0) {
+                    int diff = m_scoremodel->data(m_scoremodel->index(0), ScoreModel::PointsRole).toInt() - m_scoremodel->data(idxn, ScoreModel::PointsRole).toInt();
+                    setwin(diff);
+                }
                 break;
             }
         }
+        if (!find){
+            return;
+        }
+        int sum = 0;
+        for (int i = 0; i < m_public.count(); i++){
+            for (const ScoreMark &mark : std::as_const(m_public[i].marks)) {
+                if (m_scoremodel->data(idx, ScoreModel::ParticipantRole).toString() == mark.to) {
+                    sum += mark.amount;
+                }
+            }
+        }
+        setcurrentMark(sum);
         return;
     }
     QModelIndex idx;
@@ -175,6 +196,10 @@ void ScoreActor::reset(){
     setgiveMarksP(false);
     setgiveHighMarkP(false);
     setjuryCount(m_jury.count());
+    setwin(0);
+    setcurrentMark(0);
+    setcurrentMarkTo("");
+    setcurrentVote("");
     for (int i = 0; i < m_scoremodel->rowCount(); i++) {
         QModelIndex idx = m_scoremodel->index(i);
         m_scoremodel->setData(idx, 0, ScoreModel::PointsRole);
