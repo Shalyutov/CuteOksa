@@ -1,22 +1,11 @@
 #ifndef SCOREACTOR_H
 #define SCOREACTOR_H
 
-#endif // SCOREACTOR_H
+
 
 #include "scoremodel.h"
 
 #include <QObject>
-
-struct ScoreMark {
-    QString to;
-    int amount;
-};
-
-struct CountryScore {
-public:
-    QString from;
-    QList<ScoreMark> marks;
-};
 
 class ScoreActor : public QObject
 {
@@ -254,3 +243,5 @@ protected:
     QString _currentMarkTo;
     ScoreMark high;
 };
+
+#endif // SCOREACTOR_H

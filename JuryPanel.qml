@@ -86,6 +86,7 @@ GridView {
             state: juryState
             heartImage: flag == "" ? "images/esc_s.png" : "images/w160/" + flag + ".png"
             indexP: (2 * (delayIdx))
+            opacity: flag == "" ? 0.0 : 1.0
         }
         Rectangle {
             width: 200

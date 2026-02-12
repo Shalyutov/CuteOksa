@@ -1,7 +1,7 @@
 #include "scoremodel.h"
 
-Score::Score(const QString &participant, const int &points, const int &mark, const int &issuer, const QString &flag)
-    : m_participant(participant), m_points(points), m_mark(mark), m_issuer(issuer), m_flag(flag)
+Score::Score(const QString &participant, const int &points, const int &mark, const int &issuer, const QString &flag, const int &order)
+    : m_participant(participant), m_points(points), m_mark(mark), m_issuer(issuer), m_flag(flag), m_order(order)
 {
 }
 
@@ -23,6 +23,11 @@ int Score::mark() const
 int Score::issuer() const
 {
     return m_issuer;
+}
+
+int Score::order() const
+{
+    return m_order;
 }
 
 QString Score::flag() const
@@ -53,6 +58,11 @@ void Score::setIssuer(int issuer)
 void Score::setFlag(QString flag)
 {
     m_flag = flag;
+}
+
+void Score::setOrder(int order)
+{
+    m_order = order;
 }
 
 ScoreModel::ScoreModel(QObject *parent)
@@ -97,6 +107,8 @@ QVariant ScoreModel::data(const QModelIndex & index, int role) const {
         return score.issuer();
     else if (role == FlagRole)
         return score.flag();
+    else if (role == OrderRole)
+        return score.order();
     return QVariant();
 }
 
@@ -108,6 +120,7 @@ QHash<int, QByteArray> ScoreModel::roleNames() const {
     roles[MarkRole] = "mark";
     roles[IssuerRole] = "issuer";
     roles[FlagRole] = "flag";
+    roles[OrderRole] = "order";
     return roles;
 }
 //![0]
@@ -134,6 +147,9 @@ bool ScoreModel::setData(const QModelIndex &index, const QVariant &value, int ro
         break;
     case FlagRole:
         m_scores[index.row()].setFlag(value.toString());
+        break;
+    case OrderRole:
+        m_scores[index.row()].setOrder(value.toInt());
         break;
     default:
         return false;

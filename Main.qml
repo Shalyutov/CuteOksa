@@ -10,8 +10,8 @@ Window {
     x: 100
     y: 100
 
-
     Wizard{
+        id: wiz
         hint: getWizard();
         Item{
             focus: true
@@ -36,7 +36,7 @@ Window {
             else if (!actorv.juryP && actorv.currentP === 0) {
                 return "Разница: " + actorv.win + "\n\n" + actorv.currentVote + " - " + actorv.currentMark + " баллов"
             }
-            else if (!actorv.juryP && actorv.currentP > 0) {
+            else if (!actorv.juryP && actorv.readyP && actorv.currentP > 0) {
                 return actorv.currentVote + " - " + actorv.currentMark + " баллов"
             }
             else {
@@ -159,6 +159,9 @@ Window {
                                 event.accepted = true
                             } else if (event.key === Qt.Key_Escape) {
                                 actorv.reset()
+                                event.accepted = true
+                            } else if (event.key === Qt.Key_Tab) {
+                                wiz.visible = true
                                 event.accepted = true
                             }
                         }

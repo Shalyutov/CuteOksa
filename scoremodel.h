@@ -4,22 +4,35 @@
 #include <QAbstractItemModel>
 #include <qqmlintegration.h>
 
+struct ScoreMark {
+    QString to;
+    int amount;
+};
+
+struct CountryScore {
+public:
+    QString from;
+    QList<ScoreMark> marks;
+};
+
 class Score
 {
 public:
-    Score(const QString &participant, const int &points, const int &mark, const int &issuer, const QString &flag);
+    Score(const QString &participant, const int &points, const int &mark, const int &issuer, const QString &flag, const int &order);
 
     QString participant() const;
     int points() const;
     int mark() const;
     int issuer() const;
     QString flag() const;
+    int order() const;
 
     void setParticipant(QString participant);
     void setPoints(int points);
     void setMark(int mark);
     void setIssuer(int issuer);
     void setFlag(QString flag);
+    void setOrder(int order);
 
 private:
     QString m_participant;
@@ -27,6 +40,7 @@ private:
     int m_mark;
     int m_issuer;
     QString m_flag;
+    int m_order;
 };
 
 class ScoreModel : public QAbstractListModel
@@ -42,7 +56,8 @@ public:
         PointsRole,
         MarkRole,
         IssuerRole,
-        FlagRole
+        FlagRole,
+        OrderRole
     };
 
     //![1]

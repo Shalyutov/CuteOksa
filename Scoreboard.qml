@@ -113,6 +113,7 @@ GridView {
         required property int issuer
         required property int index
         required property string flag
+        required property int order
 
         property real anim: points
         Behavior on anim {
@@ -125,15 +126,92 @@ GridView {
             }
 
         }
+        Rectangle{
+            width: 50
+            height: 50
+            color: "transparent"
             HeartImage {
                 width: 50
                 height: 50
                 clip: true
                 state: qae.state
                 heartImage: flag == "" ? "images/esc_s.png" : "images/w160/" + flag + ".png"
-                indexP: (1 * ((index+1)%14))
+                indexP: (2 * ((index+1)%14))
                 opacity: flag == "" ? 0.0 : 1.0
             }
+            HeartPanel {
+                width: 50
+                height: 50
+                clip: true
+                heartColor: "purple"
+                state: qae.state
+                indexP: (2 * ((index+1)%14))
+                opacity: flag == "" ? 1.0 : 0.0
+            }
+            Rectangle {
+                id: ccvq
+                x: 0
+                y: 0
+                width: 50
+                height: 50
+                clip: true
+                color: "transparent"
+                opacity: 0.0
+                visible: flag == "" ? true : false
+                state: qae.state
+                states: [
+                    State {
+                        name: "ON"
+                    },
+                    State {
+                        name: "OFF"
+                    }
+                ]
+                transitions: [
+                    Transition {
+                        from: "ON"
+                        to: "OFF"
+                        SequentialAnimation {
+
+                            PauseAnimation {
+                                duration: 100 * (4 + (1 * ((index+1)%14)))
+                            }
+                            PropertyAnimation {
+                                target: ccvq
+                                property: "opacity"
+                                //from: 0.0
+                                to: 1.0
+                                duration: 200
+                            }
+                        }
+                    },
+                    Transition {
+                        from: "OFF"
+                        to: "ON"
+                        PropertyAnimation {
+                            target: ccvq
+                            property: "opacity"
+                            //from: 1.0
+                            to: 0.0
+                            duration: 200
+                        }
+                    }
+                ]
+
+                Text {
+                    text: order
+                    anchors.fill: parent
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+
+                    color: 'white'
+
+                    font.family: fontv.name
+                    font.pixelSize: 22;
+                    font.bold: true;
+                }
+            }
+        }
             Rectangle{
                 width: 200
                 height: 50
@@ -627,8 +705,8 @@ GridView {
                     width: 50
                     height: 50
                     color: "transparent"
-                    visible: mark >= 0 && issuer == 1 ? true : false
-
+                    //visible: mark >= 0 && issuer == 1 ? true : false
+                    opacity: mark >= 0 && issuer == 1 ? 1.0 : 0.0
                     state: mark >= 0 && issuer == 1 ? qae.state : "ON"
                     states: [
                         State {
@@ -674,7 +752,7 @@ GridView {
                         heartColor: "magenta"
                         state: mark >= 0 && issuer == 1 ? qae.state : "ON"
                         indexP: 0
-                        //opacity: (qae.state === "OFF" ? 1.0 : 0.0) //mark >= 0 && issuer == 1 ? 1.0 : 0.0
+                        opacity: mark >= 0 && issuer == 1 ? 1.0 : 0.0
                     }
                     Rectangle {
                         id: ddfi
